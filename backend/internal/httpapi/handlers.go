@@ -74,6 +74,40 @@ func bodyError(err error) *calc.Error {
 	}
 }
 
+type operationItem struct {
+	Name  string `json:"name"`
+	Arity int    `json:"arity"`
+}
+
+type operationsResponse struct {
+	Operations []operationItem `json:"operations"`
+}
+
+type healthResponse struct {
+	Status string `json:"status"`
+}
+
+func (h *handler) operations(w http.ResponseWriter, r *http.Request) {
+	infos := h.svc.Operations()
+	items := make([]operationItem, len(infos))
+	for i, info := range infos {
+		items[i] = operationItem{Name: info.Name, Arity: info.Arity}
+	}
+	writeJSON(w, http.StatusOK, operationsResponse{Operations: items})
+}
+
+func (h *handler) health(w http.ResponseWriter, r *http.Request) {
+	writeJSON(w, http.StatusOK, healthResponse{Status: "ok"})
+}
+
+// methodNotAllowed answers any method not registered for a known path.
+func methodNotAllowed(allow string) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Allow", allow)
+		writeError(w, http.StatusMethodNotAllowed, calc.CodeMethodNotAllowed, "method not allowed")
+	}
+}
+
 func writeJSON(w http.ResponseWriter, status int, v any) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)

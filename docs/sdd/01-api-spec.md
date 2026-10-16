@@ -43,6 +43,9 @@ Success `200 OK`:
 
 Rules:
 
+- `operation` and every operand must be JSON **strings**. A JSON number (for example `[1, 2]`) is a type error and returns `400 INVALID_JSON`.
+- A missing `operation` returns `UNKNOWN_OPERATION`; missing, `null` or empty `operands` return `INVALID_OPERAND_COUNT`; a `null` operand inside the list returns `INVALID_OPERAND`.
+
 - `operands` are decimal strings matching `^-?\d+(\.\d+)?$` (no exponent notation, no spaces).
 - Result precision: up to **12 decimal places**, trailing zeros trimmed.
 - Maximum operand length: 32 characters; maximum request body: 1 KB.
@@ -67,6 +70,7 @@ Envelope:
 | 422 | `OUT_OF_RANGE` | Result or exponent exceeds safe limits |
 | 405 | `METHOD_NOT_ALLOWED` | Wrong HTTP method |
 | 413 | `PAYLOAD_TOO_LARGE` | Body larger than 1 KB |
+| 500 | `INTERNAL_ERROR` | Unexpected server error. The message is always generic (`internal server error`); details go to the server log only |
 
 ## 6. Examples
 

@@ -24,7 +24,7 @@ backend/
       *_test.go
     httpapi/
       router.go                 # routes, method handling
-      handlers.go               # calculate, operations, healthz
+      handlers.go               # calculate, operations, health
       errors.go                 # error envelope + status mapping
       middleware.go             # recovery, logging, body limit
       *_test.go
