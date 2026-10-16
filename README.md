@@ -8,6 +8,14 @@
 
 **A full-stack calculator: React + TypeScript frontend, Go REST microservice.**
 
+<!-- TODO (task D2): hero screenshot. Take it with the app running, then uncomment.
+<div align="center">
+
+![Calculator](docs/images/calculator.png)
+
+</div>
+-->
+
 
 ## 📌 Challenge summary
 
@@ -73,6 +81,15 @@ flowchart LR
 | # | Prompt | Purpose |
 |---|---|---|
 | 01 | [Design brief (taste skill)](prompts/01-taste-design-brief.md) | Visual design rules for the UI |
+
+<!-- TODO (task D2): screenshot gallery, two columns with a bold caption, same style as job-hunter. Uncomment when the images exist.
+## 📸 Screenshots
+
+| | |
+|---|---|
+| ![Calculator](docs/images/calculator.png) **Calculator:** a result on the display and the history below | ![Mobile](docs/images/mobile.png) **Small screens:** usable at 360 px |
+| ![Error](docs/images/error.png) **Errors:** friendly message, for example division by zero | |
+-->
 
 ## 🧮 Assumptions and known behaviors
 

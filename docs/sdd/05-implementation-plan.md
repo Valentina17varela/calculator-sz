@@ -323,8 +323,13 @@ fits the time box. Cut order if time is short: B6, B5, then F9 (history) and F11
 #### D2. Final README
 - **Spec:** [00 section 6](00-overview.md) (HR checklist)
 - **Files:** `README.md`
-- **Done when:** setup, how to run frontend and backend, Docker, API examples (copy from [01](01-api-spec.md)), design decisions and assumptions, coverage table, prompts table complete, status badges updated to Done, screenshots of the UI (desktop and 360px).
-- **Verify:** a fresh clone follows the README and works without extra steps.
+- **Done when:** setup, how to run frontend and backend, Docker, API examples (copy from [01](01-api-spec.md)), design decisions and assumptions, coverage table, prompts table complete, status badges updated to Done, and **screenshots** of the UI (see below).
+- **Screenshots (required):** taken with the real app running (`docker compose up`, backend connected) after F14, saved in `docs/images/` as PNG, ideally under 300 KB each, and referenced from the README in the same style as the author's other projects (hero under the intro, then a two-column gallery with a bold caption per image). Not every feature is needed:
+  - `calculator.png` (hero): desktop width, a result on the display and the history below it.
+  - `mobile.png`: 360 px wide.
+  - `error.png` (optional): the friendly error banner, for example `1 / 0`.
+  The commented placeholders in `README.md` (hero and gallery) show the exact markup; uncomment them once the files exist. No broken image links may remain.
+- **Verify:** a fresh clone follows the README and works without extra steps, and every image in the README renders on GitHub.
 
 #### D3. Push and share
 - **Done when:** repo pushed, HR checklist in [00](00-overview.md) fully ticked, link sent to Sezzle within the deadline.

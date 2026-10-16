@@ -59,4 +59,5 @@ flowchart LR
 - [ ] Unit tests and coverage report
 - [ ] Dockerfile to run frontend + backend together (optional)
 - [ ] Prompts shared (README + `prompts/`)
+- [ ] Screenshots in `docs/images/` and shown in the README (hero plus a small gallery; not every feature is needed)
 
