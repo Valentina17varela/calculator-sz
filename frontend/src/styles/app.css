@@ -33,6 +33,51 @@ body {
   color: var(--color-muted);
 }
 
+/* Display */
+.display {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-6) var(--space-5);
+  background: var(--color-surface);
+  border-radius: var(--radius-card);
+}
+
+.display-expression {
+  min-height: 1.5em;
+  color: var(--color-muted);
+  font-size: var(--font-size-body);
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.display-value {
+  color: var(--color-ink);
+  font-weight: var(--font-weight-display);
+  line-height: 1.1;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+/* Font steps by digit count, set from the component as data-size. */
+.display-value[data-size='l'] {
+  font-size: var(--font-size-display);
+}
+
+.display-value[data-size='m'] {
+  font-size: clamp(1.75rem, 6vw, 2.25rem);
+}
+
+.display-value[data-size='s'] {
+  font-size: clamp(1.25rem, 4.5vw, 1.75rem);
+}
+
+.display[data-status='error'] .display-value {
+  color: var(--color-error);
+}
+
 /* Numeric display uses tabular figures so digits do not shift width */
 .t-numerics {
   font-variant-numeric: tabular-nums;
@@ -60,4 +105,62 @@ button {
 button:disabled {
   opacity: 0.5;
   cursor: default;
+}
+
+/* Keypad */
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-3);
+}
+
+.keypad-wide {
+  grid-column: span 2;
+  display: grid;
+}
+
+.key {
+  min-width: 48px;
+  min-height: 48px;
+  font-size: var(--font-size-key);
+  font-weight: var(--font-weight-key);
+}
+
+.keypad .key {
+  width: 100%;
+  height: 100%;
+  align-self: stretch;
+}
+
+.key-digit {
+  background: var(--color-ground);
+  border: none;
+}
+
+.key-operator {
+  background: var(--color-lavender);
+  color: var(--color-ink);
+}
+
+.key-action {
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.key-equals {
+  background: var(--color-action);
+  color: var(--color-ground);
+}
+
+.key-operator:hover:not(:disabled),
+.key-action:hover:not(:disabled) {
+  background: var(--color-lavender);
+}
+
+.key-equals:hover:not(:disabled) {
+  background: var(--color-action-hover);
+}
+
+.key-digit:hover:not(:disabled) {
+  background: var(--color-surface);
 }

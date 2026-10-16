@@ -102,8 +102,8 @@ Tick a box only after reviewing the task against its **Done when** list.
 | [X] | F4 | F | API client and types | F1 | 15 min |
 | [X] | F5 | F | Calculator reducer (pure) | F1 | 25 min |
 | [X] | F6 | F | `useCalculator` hook | F4, F5 | 15 min |
-| [ ] | F7 | F | Display component | F3 | 10 min |
-| [ ] | F8 | F | Keypad and Key components | F3 | 15 min |
+| [X] | F7 | F | Display component | F3 | 10 min |
+| [X] | F8 | F | Keypad and Key components | F3 | 15 min |
 | [ ] | F9 | F | History component | F3 | 10 min |
 | [ ] | F10 | F | Header (wordmark) and Footer (credit) | F3 | 10 min |
 | [ ] | F11 | F | `useKeyboard` hook | F6 | 10 min |
