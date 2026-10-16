@@ -18,7 +18,7 @@ export default defineConfig({
       reporter: ['text', 'html'],
       reportsDirectory: '../docs/coverage/frontend',
       include: ['src/**/*.{ts,tsx}'],
-      exclude: ['src/main.tsx', 'src/test/**', 'src/**/*.test.{ts,tsx}', 'src/vite-env.d.ts'],
+      exclude: ['src/main.tsx', 'src/test/**', 'src/**/*.test.{ts,tsx}', 'src/**/types.ts', 'src/vite-env.d.ts'],
     },
   },
 })
