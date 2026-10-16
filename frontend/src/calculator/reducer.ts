@@ -185,11 +185,6 @@ export function reducer(state: State, action: Action): State {
       }
     }
 
-    case 'requestStarted': {
-      if (state.pendingRequest?.id !== action.id) return state
-      return { ...state, status: 'loading' }
-    }
-
     case 'requestSucceeded': {
       if (state.pendingRequest?.id !== action.id) return state
       const request = state.pendingRequest

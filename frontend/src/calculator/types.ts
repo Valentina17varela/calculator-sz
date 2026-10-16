@@ -47,7 +47,6 @@ export type Action =
   | { type: 'equals' }
   | { type: 'unaryOp'; op: 'sqrt' }
   | { type: 'percent' }
-  | { type: 'requestStarted'; id: number }
   | { type: 'requestSucceeded'; id: number; result: string }
   | { type: 'requestFailed'; id: number; error: CalculationError }
   | { type: 'reuseHistory'; item: HistoryItem }
