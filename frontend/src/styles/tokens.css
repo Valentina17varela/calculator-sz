@@ -1,0 +1,66 @@
+/*
+ * Design tokens, from docs/design-read.md.
+ * Light theme only. All values reference these variables downstream.
+ */
+@import '@fontsource-variable/plus-jakarta-sans';
+
+:root {
+  /* Color roles */
+  --color-ground: #ffffff;
+  --color-ink: #201733;
+  --color-action: #8333d4;
+  --color-action-hover: #6d2ab3;
+  --color-lavender: #f2e6ff;
+  --color-mint: #9ff4d9;
+  --color-surface: #f8f8f8;
+  --color-muted: #4f4f4f;
+  --color-error: #c81828;
+
+  /* Type scale */
+  --font-family: 'Plus Jakarta Sans Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-size-display: clamp(2.5rem, 8vw, 3.5rem);
+  --font-size-key: 1.25rem;
+  --font-size-body: 1rem;
+  --font-size-fine: 0.875rem;
+  --font-weight-display: 600;
+  --font-weight-key: 500;
+  --font-weight-body: 400;
+  --font-weight-label: 500;
+
+  /* Spacing, 8-point scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+
+  /* Radius: one decision, fully round */
+  --radius-round: 999px;
+  --radius-card: 1.5rem;
+
+  /* Focus ring */
+  --focus-ring: 3px solid var(--color-action);
+  --focus-offset: 2px;
+
+  /* Motion */
+  --motion-fast: 120ms;
+  --motion-base: 200ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-fast: 0ms;
+    --motion-base: 0ms;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

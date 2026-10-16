@@ -86,7 +86,7 @@ Tick a box only after reviewing the task against its **Done when** list.
 | [X] | B1 | B | Go module and error types | S1 | 10 min |
 | [X] | B2 | B | Decimal parse and format | B1 | 20 min |
 | [X] | B3 | B | Add, subtract, multiply | B2 | 10 min |
-| [ ] | B4 | B | Divide | B2 | 10 min |
+| [X] | B4 | B | Divide | B2 | 10 min |
 | [ ] | B5 | B | Power | B2 | 15 min |
 | [ ] | B6 | B | Square root | B2 | 20 min |
 | [ ] | B7 | B | Percent | B2 | 10 min |
@@ -98,7 +98,7 @@ Tick a box only after reviewing the task against its **Done when** list.
 | [ ] | B13 | B | `main.go`, config, graceful shutdown | B12 | 10 min |
 | [X] | F1 | F | Frontend scaffold and tooling | S1 | 15 min |
 | [X] | F2 | F | Design read with taste skill (Step 1) | F1 | 10 min |
-| [ ] | F3 | F | Theme tokens and base styles | F2 | 15 min |
+| [X] | F3 | F | Theme tokens and base styles | F2 | 15 min |
 | [ ] | F4 | F | API client and types | F1 | 15 min |
 | [ ] | F5 | F | Calculator reducer (pure) | F1 | 25 min |
 | [ ] | F6 | F | `useCalculator` hook | F4, F5 | 15 min |
