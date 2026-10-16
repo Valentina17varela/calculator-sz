@@ -11,14 +11,14 @@ The project follows **Spec-Driven Development (SDD)**: specs first, then tests, 
 
 ```mermaid
 flowchart LR
-    HR["📧 HR brief"] --> P1["01 Design brief"]
+    HR["HR brief"] --> P1["01 Design brief"]
     HR --> P2["02 SDD specification"]
     P2 --> DOCS["docs/sdd<br/>specs 00 to 04"]
     DOCS --> P3["03 Implementation plan<br/>atomic tasks"]
     P3 --> W["04 Worker agents<br/>one task each"]
     W -->|"files + Verify command"| R["05 Reviewer<br/>runs, mutates, reports"]
     R -->|"findings"| W
-    R -->|"approved task"| H["👩🏻‍💻 Human ticks the plan<br/>and commits"]
+    R -->|"approved task"| H["Human ticks the plan<br/>and commits"]
     D["06 Decision prompts"] -.-> DOCS
     D -.-> W
     P1 -.-> W
