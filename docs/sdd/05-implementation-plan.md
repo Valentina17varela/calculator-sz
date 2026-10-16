@@ -110,6 +110,8 @@ Tick a box only after reviewing the task against its **Done when** list.
 | [ ] | F12 | F | App assembly with error and loading states | F7 to F11 | 15 min |
 | [ ] | F13 | F | Responsive and accessibility pass | F12 | 15 min |
 | [ ] | F14 | F | Taste audits (Step 3) and fixes | F13 | 15 min |
+| [ ] | F15 | F | Client request timeout (10 s) | F4, F6 | 15 min |
+| [ ] | F16 | F | Keep Clear enabled while loading | F8 | 5 min |
 | [ ] | I1 | I | Backend Dockerfile | B13 | 10 min |
 | [ ] | I2 | I | Frontend Dockerfile and nginx proxy | F14 | 10 min |
 | [ ] | I3 | I | Compose and root Makefile | I1, I2 | 10 min |
@@ -280,6 +282,18 @@ fits the time box. Cut order if time is short: B6, B5, then F9 (history) and F11
 - **Files:** `docs/design-read.md` (audit results), fixes in `src/`
 - **Done when:** em-dash audit has zero hits across the repo (`grep -rnP "\x{2014}|\x{2013}" . --exclude-dir=node_modules --exclude-dir=.git`), Pre-Flight Check items all Pass, accessibility and mobile audits pass. Any Fail blocks completion.
 - **Verify:** audit section in `docs/design-read.md` is complete and the grep returns nothing.
+
+#### F15. Client request timeout (10 s)
+- **Spec:** [03 section 4](03-frontend-design.md) (Timeout) and the error table in section 3
+- **Files:** `src/api/client.ts`, `src/api/client.test.ts`, `src/hooks/useCalculator.ts`, `src/hooks/useCalculator.test.ts`
+- **Done when:** `calculate()` and `listOperations()` abort after 10 s using an `AbortController` plus `setTimeout` (cleared in `finally`); a timeout throws `RequestTimeoutError`, a caller abort still throws `AbortError`; `messageForError` maps `RequestTimeoutError` to "The calculator service took too long. Try again" and the error code is `TIMEOUT`. Tests with `vi.useFakeTimers`: timeout fires at 10 s and not before, timer cleared on success, caller abort is not reported as timeout, hook shows the timeout message and recovers.
+- **Verify:** `npm run test -- --run src/api src/hooks && npm run lint && npm run build`
+
+#### F16. Keep Clear enabled while loading
+- **Spec:** [03 section 3](03-frontend-design.md) (Buttons while loading)
+- **Files:** `src/components/Keypad.tsx`, `src/components/Keypad.test.tsx`
+- **Done when:** with `disabled` true every key is disabled **except Clear**; pressing Clear while loading dispatches `clear`. Test: all other keys disabled, Clear enabled and dispatches. Depends on the reducer already accepting `clear` during loading (it does and cancels the request through the hook cleanup).
+- **Verify:** `npm run test -- --run Keypad && npm run lint`
 
 ### I. Infrastructure
 

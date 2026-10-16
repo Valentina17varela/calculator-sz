@@ -213,3 +213,20 @@ button:disabled {
   color: var(--color-muted);
   font-size: var(--font-size-fine);
 }
+
+/* App layout: one centered column */
+.app {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-4) var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.app-title {
+  font-size: var(--font-size-key);
+  font-weight: var(--font-weight-display);
+  letter-spacing: -0.02em;
+}

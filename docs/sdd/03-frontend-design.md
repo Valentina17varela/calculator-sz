@@ -83,7 +83,7 @@ Rules:
 | `sqrt` | API `sqrt [display]` immediately |
 | `^` | Binary operation `power` |
 | API error | Show message, keep inputs so the user can correct; any digit or clear recovers |
-| Buttons while `loading` | Disabled; keyboard input ignored |
+| Buttons while `loading` | All disabled except `C` (Clear), which stays enabled: it cancels the in-flight request and resets the calculator, so the UI can never get stuck. Other keyboard input is ignored |
 
 Error message mapping (friendly text, keyed by API `code`):
 
@@ -94,6 +94,7 @@ Error message mapping (friendly text, keyed by API `code`):
 | `NON_INTEGER_EXPONENT` | The exponent must be a whole number |
 | `OUT_OF_RANGE` | That number is too large to calculate |
 | network failure | Cannot reach the calculator service. Try again |
+| request timeout (10 s) | The calculator service took too long. Try again |
 | anything else | Something went wrong. Try again |
 
 ## 4. API client
@@ -106,6 +107,7 @@ export async function calculate(operation: Operation, operands: string[], signal
 - Uses `fetch` against the relative path `/api/v1/calculate` (proxy handles host).
 - Throws `ApiError` for non-2xx with the envelope; throws `NetworkError` when the request fails.
 - Supports `AbortSignal`; a newer request cancels an older one.
+- **Timeout:** every request is cancelled after **10 seconds**. The client throws a `RequestTimeoutError` (distinct from `NetworkError` and from a user abort, which still surfaces as `AbortError`). Implemented with an `AbortController` and `setTimeout` (cleared on completion) so it can be tested with fake timers.
 
 ## 5. Components
 
