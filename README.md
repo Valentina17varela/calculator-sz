@@ -12,7 +12,7 @@ A full-stack calculator: a React + TypeScript frontend that calls a Go REST micr
 
 <div align="center">
 
-![Calculator](docs/images/calculator.png)
+<img src="docs/images/calculator.png" alt="Sezzle Calculator" width="300">
 
 </div>
 
@@ -84,7 +84,7 @@ make dev-api    # only the backend:  cd backend && go run ./cmd/server
 make dev-web    # only the frontend: cd frontend && npm run dev
 ```
 
-`make dev` and `make up` both use port 8080, so run one at a time. Set `PORT` to change the API port.
+`make dev` and `make up` both use port 8080, so run one at a time. Set `PORT` to change the API port. The first frontend command installs its dependencies (`npm ci`) on its own; `make install` does it explicitly.
 
 | Command | What it does |
 |---|---|
