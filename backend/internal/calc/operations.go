@@ -72,3 +72,9 @@ func Sqrt(args []*big.Rat) (*big.Rat, error) {
 	root := scaled.Sqrt(scaled)
 	return new(big.Rat).SetFrac(root, sqrtScale), nil
 }
+
+// Percent takes [p, base] and returns p percent of base: base * p / 100.
+func Percent(args []*big.Rat) (*big.Rat, error) {
+	r := new(big.Rat).Mul(args[1], args[0])
+	return r.Quo(r, big.NewRat(100, 1)), nil
+}
