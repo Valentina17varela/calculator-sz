@@ -1,0 +1,11 @@
+.git
+.gitignore
+.dockerignore
+Dockerfile
+scripts
+**/*_test.go
+**/testdata
+*.test
+*.out
+coverage*
+*.md

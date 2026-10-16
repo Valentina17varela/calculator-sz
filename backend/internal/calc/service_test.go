@@ -1,6 +1,7 @@
 package calc
 
 import (
+	"errors"
 	"reflect"
 	"strings"
 	"testing"
@@ -81,6 +82,33 @@ func TestServiceCalculateErrors(t *testing.T) {
 				t.Errorf("got %q, want empty result on error", got)
 			}
 			assertCode(t, err, tt.code)
+		})
+	}
+}
+
+func TestServiceInvalidOperandMessage(t *testing.T) {
+	svc := NewService()
+	tests := []struct {
+		name     string
+		op       string
+		operands []string
+		want     string
+	}{
+		{"first operand", "add", []string{"abc", "1"}, "operand 1 is not a valid decimal number"},
+		{"second operand", "add", []string{"1", "abc"}, "operand 2 is not a valid decimal number"},
+		{"unary operand", "sqrt", []string{""}, "operand 1 is not a valid decimal number"},
+		{"exponent notation", "percent", []string{"5", "1e3"}, "operand 2 is not a valid decimal number"},
+		{"first invalid wins", "add", []string{"x", "y"}, "operand 1 is not a valid decimal number"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := svc.Calculate(tt.op, tt.operands)
+
+			assertCode(t, err, CodeInvalidOperand)
+			var calcErr *Error
+			if errors.As(err, &calcErr) && calcErr.Message != tt.want {
+				t.Errorf("Message = %q, want %q", calcErr.Message, tt.want)
+			}
 		})
 	}
 }

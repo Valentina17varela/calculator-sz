@@ -19,10 +19,8 @@ func ParseDecimal(s string) (*big.Rat, error) {
 	if len(s) > maxOperandLen || !decimalPattern.MatchString(s) {
 		return nil, newError(CodeInvalidOperand, "operand is not a valid decimal number")
 	}
-	r, ok := new(big.Rat).SetString(s)
-	if !ok {
-		return nil, newError(CodeInvalidOperand, "operand is not a valid decimal number")
-	}
+	// decimalPattern only admits strings that SetString always accepts.
+	r, _ := new(big.Rat).SetString(s)
 	return r, nil
 }
 

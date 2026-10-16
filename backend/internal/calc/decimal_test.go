@@ -83,6 +83,18 @@ func TestParseDecimalInvalid(t *testing.T) {
 	}
 }
 
+func TestParseDecimalErrorMessage(t *testing.T) {
+	_, err := ParseDecimal("abc")
+
+	var calcErr *Error
+	if !errors.As(err, &calcErr) {
+		t.Fatalf("error = %v, want *Error", err)
+	}
+	if want := "operand is not a valid decimal number"; calcErr.Message != want {
+		t.Errorf("Message = %q, want %q", calcErr.Message, want)
+	}
+}
+
 func TestFormatDecimalValid(t *testing.T) {
 	tests := []struct {
 		name  string

@@ -84,6 +84,8 @@ flowchart LR
 | Validation order in `power` | The exponent range is checked **before** the zero base rule, so `0 ^ -101` is `OUT_OF_RANGE` and `0 ^ -1` is `DIVISION_BY_ZERO` | One simple rule: validate the exponent first |
 | Number format | Numbers travel as decimal strings, no exponent notation, up to 32 characters | Avoids float precision loss (`0.1 + 0.2 = 0.3`) |
 | Percent | `percent [p, base]` means `p%` of `base` | Documented in [01-api-spec](docs/sdd/01-api-spec.md) |
+| Request timeout | The UI waits at most **10 seconds** for the API, then shows "The calculator service took too long" | A hung backend must never leave the calculator stuck |
+| Clear while loading | `C` stays enabled during a request and cancels it | The user can always recover |
 
 ## 🚀 Setup and run
 
