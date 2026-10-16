@@ -105,14 +105,14 @@ Tick a box only after reviewing the task against its **Done when** list.
 | [X] | F7 | F | Display component | F3 | 10 min |
 | [X] | F8 | F | Keypad and Key components | F3 | 15 min |
 | [X] | F9 | F | History component | F3 | 10 min |
-| [ ] | F10 | F | Header (wordmark) and Footer (credit) | F3 | 10 min |
+| [X] | F10 | F | Header (wordmark) and Footer (credit) | F3 | 10 min |
 | [ ] | F11 | F | `useKeyboard` hook | F6 | 10 min |
 | [ ] | F12 | F | App assembly with error and loading states | F7 to F11 | 15 min |
 | [ ] | F13 | F | Responsive and accessibility pass | F12 | 15 min |
 | [ ] | F14 | F | Taste audits (Step 3) and fixes | F13 | 15 min |
 | [ ] | F15 | F | Client request timeout (10 s) | F4, F6 | 15 min |
 | [ ] | F16 | F | Keep Clear enabled while loading | F8 | 5 min |
-| [ ] | I1 | I | Backend Dockerfile | B13 | 10 min |
+| [X] | I1 | I | Backend Dockerfile | B13 | 10 min |
 | [ ] | I2 | I | Frontend Dockerfile and nginx proxy | F14 | 10 min |
 | [ ] | I3 | I | Compose and root Makefile | I1, I2 | 10 min |
 | [ ] | D1 | D | Acceptance run (A1 to A8) and coverage | I3 | 15 min |
@@ -301,6 +301,7 @@ fits the time box. Cut order if time is short: B6, B5, then F9 (history) and F11
 - **Files:** `backend/Dockerfile`, `backend/.dockerignore`
 - **Done when:** multi-stage build, static binary, non-root user, small final image.
 - **Verify:** `docker build -t sezzle-calc-api backend && docker run --rm -p 8080:8080 sezzle-calc-api` then `curl localhost:8080/health`.
+- **Also delivered with I1 (reviewed):** `backend/scripts/smoke.sh` (26 API checks, exits non-zero on any failure, used again in D1 against `docker compose up`) and native Go fuzz tests in `internal/calc/fuzz_test.go` (`go test ./internal/calc -run '^$' -fuzz FuzzCalculate -fuzztime 30s`).
 
 #### I2. Frontend Dockerfile and nginx proxy
 - **Files:** `frontend/Dockerfile`, `frontend/nginx.conf`, `frontend/.dockerignore`

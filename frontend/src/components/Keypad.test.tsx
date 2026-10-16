@@ -47,11 +47,16 @@ describe('Keypad', () => {
     expect(onAction).toHaveBeenCalledWith(expected)
   })
 
-  it('disables every key while loading', () => {
-    setup(true)
+  it('disables every key while loading except Clear', async () => {
+    const { onAction } = setup(true)
     for (const button of screen.getAllByRole('button')) {
-      expect(button).toBeDisabled()
+      if (button.getAttribute('aria-label') === 'Clear') continue
+      expect(button, button.getAttribute('aria-label') ?? '').toBeDisabled()
     }
+    const clear = screen.getByRole('button', { name: 'Clear' })
+    expect(clear).toBeEnabled()
+    await userEvent.click(clear)
+    expect(onAction).toHaveBeenCalledWith({ type: 'clear' })
   })
 
   it('uses icon glyphs with aria-hidden so the name comes from the label', () => {
