@@ -114,7 +114,7 @@ Tick a box only after reviewing the task against its **Done when** list.
 | [ ] | F16 | F | Keep Clear enabled while loading | F8 | 5 min |
 | [X] | I1 | I | Backend Dockerfile | B13 | 10 min |
 | [X] | I2 | I | Frontend Dockerfile and nginx proxy | F14 | 10 min |
-| [ ] | I3 | I | Compose and root Makefile | I1, I2 | 10 min |
+| [X] | I3 | I | Compose and root Makefile | I1, I2 | 10 min |
 | [ ] | D1 | D | Acceptance run (A1 to A8) and coverage | I3 | 15 min |
 | [ ] | D2 | D | Final README (setup, API, decisions, coverage, prompts) | D1 | 15 min |
 | [ ] | D3 | D | Push and share the repository link | D2 | 5 min |

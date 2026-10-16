@@ -1,0 +1,29 @@
+services:
+  api:
+    build: ./backend
+    image: sezzle-calc-api
+    environment:
+      PORT: "8080"
+    # No published ports: the API is only reachable through the web proxy.
+    expose:
+      - "8080"
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+
+  web:
+    build: ./frontend
+    image: sezzle-calc-web
+    ports:
+      - "8080:8080"
+    depends_on:
+      api:
+        condition: service_healthy
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
