@@ -15,7 +15,7 @@ export default function Keypad({ onAction, disabled = false }: KeypadProps) {
 
   return (
     <div className="keypad" role="group" aria-label="Calculator keypad">
-      <Key label="C" ariaLabel="Clear" variant="action" onPress={() => onAction({ type: 'clear' })} disabled={disabled} />
+      <Key label="C" ariaLabel="Clear" variant="action" onPress={() => onAction({ type: 'clear' })} />
       <Key label="+/-" ariaLabel="Negate" variant="action" onPress={() => onAction({ type: 'negate' })} disabled={disabled} />
       <Key label="%" ariaLabel="Percent" variant="action" icon={<Percent size={20} aria-hidden />} onPress={() => onAction({ type: 'percent' })} disabled={disabled} />
       <Key label="÷" ariaLabel="Divide" variant="operator" icon={<Divide size={20} aria-hidden />} onPress={binary('divide')} disabled={disabled} />

@@ -106,7 +106,7 @@ Tick a box only after reviewing the task against its **Done when** list.
 | [X] | F8 | F | Keypad and Key components | F3 | 15 min |
 | [X] | F9 | F | History component | F3 | 10 min |
 | [X] | F10 | F | Header (wordmark) and Footer (credit) | F3 | 10 min |
-| [ ] | F11 | F | `useKeyboard` hook | F6 | 10 min |
+| [X] | F11 | F | `useKeyboard` hook | F6 | 10 min |
 | [ ] | F12 | F | App assembly with error and loading states | F7 to F11 | 15 min |
 | [ ] | F13 | F | Responsive and accessibility pass | F12 | 15 min |
 | [ ] | F14 | F | Taste audits (Step 3) and fixes | F13 | 15 min |
