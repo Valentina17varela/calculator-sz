@@ -52,6 +52,14 @@ describe('useKeyboard', () => {
     expect(onAction).not.toHaveBeenCalled()
   })
 
+  it('while loading, Escape, c and C still cancel', async () => {
+    for (const key of ['{Escape}', 'c', 'C']) {
+      const { onAction } = setup(true)
+      await userEvent.keyboard(key)
+      expect(onAction, `key ${key}`).toHaveBeenCalledWith({ type: 'clear' })
+    }
+  })
+
   it('ignores keys typed into a text input', async () => {
     const { onAction } = setup()
     const { container } = render(<input aria-label="Search" />)

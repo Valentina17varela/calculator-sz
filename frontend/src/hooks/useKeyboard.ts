@@ -36,9 +36,11 @@ export function useKeyboard(onAction: (action: Action) => void, { loading }: Use
     const handler = (event: KeyboardEvent) => {
       // Let browser and OS shortcuts through (Cmd+R, Ctrl+C, Alt+Tab).
       if (event.ctrlKey || event.metaKey || event.altKey) return
-      if (loading || isInTextInput(event.target)) return
+      if (isInTextInput(event.target)) return
       const action = actionFor(event.key)
       if (action === null) return
+      // While loading only cancel (Escape, c, C) goes through, like the Clear key.
+      if (loading && action.type !== 'clear') return
       event.preventDefault()
       onAction(action)
     }

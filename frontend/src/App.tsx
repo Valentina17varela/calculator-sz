@@ -1,18 +1,26 @@
+import { useCallback } from 'react'
 import Display from './components/Display'
+import ErrorBanner from './components/ErrorBanner'
 import Footer from './components/Footer'
 import Header from './components/Header'
 import History from './components/History'
 import Keypad from './components/Keypad'
 import { opSymbol } from './calculator/reducer'
 import { useCalculator } from './hooks/useCalculator'
+import { useKeyboard } from './hooks/useKeyboard'
 import type { Action, HistoryItem } from './calculator/types'
 
 /** Single-screen app: display on top, keypad, history below. */
 export default function App() {
   const { state, dispatch } = useCalculator()
+  const loading = state.status === 'loading'
 
-  const onAction = (action: Action) => dispatch(action)
-  const onReuse = (item: HistoryItem) => dispatch({ type: 'reuseHistory', item })
+  const onAction = useCallback((action: Action) => dispatch(action), [dispatch])
+  const onReuse = useCallback(
+    (item: HistoryItem) => dispatch({ type: 'reuseHistory', item }),
+    [dispatch],
+  )
+  useKeyboard(onAction, { loading })
 
   return (
     <div className="shell">
@@ -23,7 +31,8 @@ export default function App() {
           value={state.display}
           status={state.status}
         />
-        <Keypad onAction={onAction} disabled={state.status === 'loading'} />
+        <ErrorBanner error={state.error} />
+        <Keypad onAction={onAction} disabled={loading} />
         <History items={state.history} onReuse={onReuse} />
       </main>
       <Footer />

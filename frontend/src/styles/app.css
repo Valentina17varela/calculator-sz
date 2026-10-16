@@ -33,6 +33,16 @@ body {
   color: var(--color-muted);
 }
 
+/* Error banner */
+.error-banner {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-round);
+  background: var(--color-lavender);
+  color: var(--color-error);
+  font-weight: var(--font-weight-label);
+  text-align: center;
+}
+
 /* Display */
 .display {
   display: flex;
