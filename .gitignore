@@ -1,0 +1,34 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.idea/
+.vscode/
+*.swp
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Go (backend)
+backend/bin/
+backend/coverage.out
+*.test
+*.out
+
+# Node (frontend)
+node_modules/
+frontend/dist/
+frontend/coverage/
+*.tsbuildinfo
+npm-debug.log*
+.vite/
+
+# Claude Code local files
+.claude/
+
+# Local AI tooling (skills are cited in the README, not vendored)
+.agents/
+skills-lock.json
