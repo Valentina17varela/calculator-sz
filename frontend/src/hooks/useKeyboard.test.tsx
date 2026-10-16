@@ -87,6 +87,31 @@ describe('useKeyboard', () => {
     expect(event.defaultPrevented).toBe(false)
   })
 
+  it.each([
+    ['{Shift>}+{/Shift}', { type: 'binaryOp', op: 'add' }],
+    ['{Shift>}*{/Shift}', { type: 'binaryOp', op: 'multiply' }],
+    ['{Shift>}%{/Shift}', { type: 'percent' }],
+    ['{Shift>}^{/Shift}', { type: 'binaryOp', op: 'power' }],
+  ])('%s keeps working with shift held', async (keys, expected) => {
+    const { onAction } = setup()
+    await userEvent.keyboard(keys)
+    expect(onAction).toHaveBeenCalledWith(expected)
+  })
+
+  it('prevents the default of a mapped key', () => {
+    const { onAction } = setup()
+    const event = new KeyboardEvent('keydown', { key: '=', cancelable: true })
+    window.dispatchEvent(event)
+    expect(onAction).toHaveBeenCalledWith({ type: 'equals' })
+    expect(event.defaultPrevented).toBe(true)
+  })
+
+  it('capital R also maps to square root', async () => {
+    const { onAction } = setup()
+    await userEvent.keyboard('R')
+    expect(onAction).toHaveBeenCalledWith({ type: 'unaryOp', op: 'sqrt' })
+  })
+
   it('removes the listener on unmount', async () => {
     const onAction = vi.fn()
     function Harness() {

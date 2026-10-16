@@ -27,7 +27,16 @@ export class NetworkError extends Error {
   }
 }
 
+/** No answer within 10 seconds. */
+export class RequestTimeoutError extends Error {
+  constructor() {
+    super('request timed out')
+    this.name = 'RequestTimeoutError'
+  }
+}
+
 const BASE = '/api/v1'
+export const TIMEOUT_MS = 10000
 
 function isAbort(error: unknown): boolean {
   return error instanceof DOMException && error.name === 'AbortError'
@@ -65,14 +74,33 @@ async function parseSuccess<T>(response: Response): Promise<T> {
   }
 }
 
-/** Shared fetch wrapper: NetworkError on failure, AbortError passes through. */
-async function request(url: string, init: RequestInit): Promise<Response> {
+/**
+ * Shared fetch wrapper: NetworkError on failure, AbortError passes through,
+ * RequestTimeoutError after 10 seconds without an answer. The caller's signal
+ * and the timeout share one internal controller.
+ */
+async function request(url: string, init: RequestInit, signal?: AbortSignal): Promise<Response> {
+  const controller = new AbortController()
+  let timedOut = false
+  const onCallerAbort = () => controller.abort()
+  if (signal) {
+    if (signal.aborted) throw new DOMException('The operation was aborted.', 'AbortError')
+    signal.addEventListener('abort', onCallerAbort)
+  }
+  const timer = setTimeout(() => {
+    timedOut = true
+    controller.abort()
+  }, TIMEOUT_MS)
   let response: Response
   try {
-    response = await fetch(url, init)
+    response = await fetch(url, { ...init, signal: controller.signal })
   } catch (error) {
+    if (timedOut) throw new RequestTimeoutError()
     if (isAbort(error)) throw error
     throw new NetworkError()
+  } finally {
+    clearTimeout(timer)
+    signal?.removeEventListener('abort', onCallerAbort)
   }
   if (!response.ok) throw await parseError(response)
   return response
@@ -81,7 +109,8 @@ async function request(url: string, init: RequestInit): Promise<Response> {
 /**
  * POST /api/v1/calculate. Returns the result string.
  * Throws ApiError for non-2xx API responses, NetworkError when the request
- * never completes or the response did not come from the API.
+ * never completes or the response did not come from the API, and
+ * RequestTimeoutError after 10 seconds without an answer.
  */
 export async function calculate(
   operation: CalculateRequest['operation'],
@@ -93,14 +122,13 @@ export async function calculate(
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(requestBody),
-    signal,
-  })
+  }, signal)
   const body = await parseSuccess<CalculateResponse>(response)
   return body.result
 }
 
 /** GET /api/v1/operations. Throws ApiError for non-2xx API responses. */
 export async function listOperations(signal?: AbortSignal): Promise<OperationsResponse> {
-  const response = await request(`${BASE}/operations`, { signal })
+  const response = await request(`${BASE}/operations`, {}, signal)
   return parseSuccess<OperationsResponse>(response)
 }

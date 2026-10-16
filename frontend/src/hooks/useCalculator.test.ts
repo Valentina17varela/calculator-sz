@@ -1,10 +1,15 @@
 import { act, renderHook } from '@testing-library/react'
-import { describe, expect, it, vi } from 'vitest'
-import { ApiError, NetworkError } from '../api/client'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { ApiError, NetworkError, RequestTimeoutError } from '../api/client'
 import type { Action } from '../calculator/types'
 import { messageForError, useCalculator } from './useCalculator'
 
 type CalculateMock = ReturnType<typeof vi.fn>
+
+afterEach(() => {
+  vi.useRealTimers()
+  vi.unstubAllGlobals()
+})
 
 interface Deferred {
   mock: CalculateMock
@@ -210,9 +215,50 @@ describe('useCalculator', () => {
   })
 })
 
+describe('timeout handling in the hook', () => {
+  it('shows the timeout message and recovers with clear', async () => {
+    vi.useFakeTimers()
+    // Real calculate hook: the timeout lives in client.ts, so stub fetch itself.
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockImplementation(
+        (_url: string, init?: RequestInit) =>
+          new Promise<Response>((_resolve, reject) => {
+            init?.signal?.addEventListener('abort', () =>
+              reject(new DOMException('The operation was aborted.', 'AbortError')),
+            )
+          }),
+      ),
+    )
+    const hook = renderHook(() => useCalculator())
+    dispatchAll(hook, [
+      { type: 'digit', digit: '1' },
+      { type: 'binaryOp', op: 'add' },
+      { type: 'digit', digit: '1' },
+      { type: 'equals' },
+    ])
+    expect(hook.result.current.state.status).toBe('loading')
+    // The client timeout fires at 10 seconds.
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(10000)
+    })
+    expect(hook.result.current.state.status).toBe('error')
+    expect(hook.result.current.state.error?.code).toBe('TIMEOUT')
+    expect(hook.result.current.state.error?.message).toBe('The calculator service took too long. Try again')
+    // Clear recovers.
+    dispatchAll(hook, [{ type: 'clear' }])
+    expect(hook.result.current.state.error).toBeNull()
+    expect(hook.result.current.state.status).toBe('entering')
+  })
+})
+
 describe('messageForError', () => {
   it('gives the network message for NetworkError', () => {
     expect(messageForError(new NetworkError())).toBe('Cannot reach the calculator service. Try again')
+  })
+
+  it('gives the timeout message for RequestTimeoutError', () => {
+    expect(messageForError(new RequestTimeoutError())).toBe('The calculator service took too long. Try again')
   })
 
   it('gives the fallback for unknown errors', () => {

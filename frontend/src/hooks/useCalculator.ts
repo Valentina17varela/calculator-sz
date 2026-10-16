@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useReducer, useRef } from 'react'
-import { ApiError, NetworkError, calculate as defaultCalculate } from '../api/client'
+import { ApiError, NetworkError, RequestTimeoutError, calculate as defaultCalculate } from '../api/client'
 import type { Operation } from '../api/types'
 import { initialState, reducer } from '../calculator/reducer'
 import type { Action, CalculationError, State } from '../calculator/types'
@@ -9,6 +9,7 @@ const ERROR_MESSAGES: Record<string, string> = {
   NEGATIVE_SQUARE_ROOT: 'Square root needs a number of zero or more',
   NON_INTEGER_EXPONENT: 'The exponent must be a whole number',
   OUT_OF_RANGE: 'That number is too large to calculate',
+  TIMEOUT: 'The calculator service took too long. Try again',
 }
 
 const NETWORK_MESSAGE = 'Cannot reach the calculator service. Try again'
@@ -17,8 +18,15 @@ const FALLBACK_MESSAGE = 'Something went wrong. Try again'
 /** Maps an API or transport failure to the friendly message from the design doc. */
 export function messageForError(error: unknown): string {
   if (error instanceof NetworkError) return NETWORK_MESSAGE
+  if (error instanceof RequestTimeoutError) return ERROR_MESSAGES.TIMEOUT
   if (error instanceof ApiError) return ERROR_MESSAGES[error.code] ?? FALLBACK_MESSAGE
   return FALLBACK_MESSAGE
+}
+
+function codeForError(error: unknown): string {
+  if (error instanceof ApiError) return error.code
+  if (error instanceof RequestTimeoutError) return 'TIMEOUT'
+  return 'NETWORK_ERROR'
 }
 
 export interface UseCalculatorResult {
@@ -59,7 +67,7 @@ export function useCalculator(
       .catch((error: unknown) => {
         if (controller.signal.aborted) return
         const errorInfo: CalculationError = {
-          code: error instanceof ApiError ? error.code : 'NETWORK_ERROR',
+          code: codeForError(error),
           message: messageForError(error),
         }
         dispatch({ type: 'requestFailed', id: request.id, error: errorInfo })
