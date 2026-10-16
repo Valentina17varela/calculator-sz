@@ -74,6 +74,17 @@ flowchart LR
 |---|---|---|
 | 01 | [Design brief (taste skill)](prompts/01-taste-design-brief.md) | Visual design rules for the UI |
 
+## 🧮 Assumptions and known behaviors
+
+| Topic | Behavior | Why |
+|---|---|---|
+| Precision | Results are rounded to **12 decimal places**, trailing zeros trimmed | Exact arithmetic (`math/big.Rat`), rounding only when formatting |
+| Tiny results | A non-zero result smaller than 0.0000000000005 is shown as `0` (for example `2 ^ -100`) | Direct consequence of the 12 decimal places rule, not a calculation error |
+| Exponent range | `power` accepts integer exponents from -100 to 100; anything else is `OUT_OF_RANGE` | Keeps results bounded and the service safe |
+| Validation order in `power` | The exponent range is checked **before** the zero base rule, so `0 ^ -101` is `OUT_OF_RANGE` and `0 ^ -1` is `DIVISION_BY_ZERO` | One simple rule: validate the exponent first |
+| Number format | Numbers travel as decimal strings, no exponent notation, up to 32 characters | Avoids float precision loss (`0.1 + 0.2 = 0.3`) |
+| Percent | `percent [p, base]` means `p%` of `base` | Documented in [01-api-spec](docs/sdd/01-api-spec.md) |
+
 ## 🚀 Setup and run
 
 _Will be filled in when the implementation lands (backend, frontend, Docker, tests, coverage)._
