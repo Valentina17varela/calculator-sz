@@ -83,7 +83,7 @@ Tick a box only after reviewing the task against its **Done when** list.
 | X | ID | Lane | Task | Depends on | Est. |
 |---|---|---|---|---|---|
 | [X] | S1 | S | Create repo, first docs commit | none | 5 min |
-| [ ] | B1 | B | Go module and error types | S1 | 10 min |
+| [X] | B1 | B | Go module and error types | S1 | 10 min |
 | [ ] | B2 | B | Decimal parse and format | B1 | 20 min |
 | [ ] | B3 | B | Add, subtract, multiply | B2 | 10 min |
 | [ ] | B4 | B | Divide | B2 | 10 min |
