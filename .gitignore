@@ -12,9 +12,7 @@ Thumbs.db
 .env.*
 !.env.example
 
-# Go (backend)
-backend/bin/
-backend/coverage.out
+# Go (backend): raw profiles are ignored, the HTML reports in docs/coverage are versioned
 *.test
 *.out
 
@@ -24,6 +22,9 @@ frontend/dist/
 *.tsbuildinfo
 npm-debug.log*
 .vite/
+
+# Logs
+*.log
 
 # Claude Code local files
 .claude/

@@ -67,7 +67,41 @@ alternative in feel (geometric, friendly), keeps the project license-clean and w
 
 ## Audits
 
-Filled in during F13 and F14 (accessibility, mobile at 360px, em-dash audit, Pre-Flight Check).
+### F13 audit, run 1 (real Chrome, 360, 768 and 1280 px, app served with the real backend)
+
+| Check | 360 px | 768 px | 1280 px | Notes |
+|---|---|---|---|---|
+| No horizontal page scroll, initial state | Pass | Pass | Pass | |
+| No horizontal page scroll with a 64 digit history entry | **Fail** | **Fail** | Pass | Page is 708 px wide at 360 px and 866 px at 768 px |
+| Every button at least 44 x 44 px (22 keys) | Pass | Pass | Pass | |
+| Display of `2 ^ 100` (31 digits) fully visible | Pass | Pass | Pass | Steps down to 20 px at 360 px, no overflow |
+| Display of a 64 digit result fully visible | Pass | Pass | Pass | |
+| History item contains its content | **Fail** | **Fail** | **Fail** | Item is 668 px wide inside a 280 px column; the result breaks one digit per line and the pill grows to about 1,200 px tall |
+| Visible focus ring on keyboard focus | Pass | Pass | Pass | 3 px solid, 2 px offset |
+| Error alert text | Pass | Pass | Pass | "Cannot divide by zero", display value turns red |
+| Plus Jakarta Sans loads | Pass | Pass | Pass | |
+| Console: no errors other than the expected `422` | **Fail** | Pass | Pass | One `404` on first load at 360 px: no favicon is declared |
+
+Contrast of the colors used by the components (WCAG AA needs 4.5 or more for text):
+
+| Pair | Ratio | Result |
+|---|---|---|
+| Error text on the lavender banner | 4.85 | Pass |
+| Error value on the display surface | 5.47 | Pass |
+| Wordmark purple on white | 6.20 | Pass |
+| White on the equals key | 6.20 | Pass |
+| Muted text on the display surface and on white | 7.71 and 8.19 | Pass |
+| Ink on lavender keys | 14.24 | Pass |
+
+Open findings before F13 can close:
+
+1. **History item layout (blocking).** A long expression and result break the layout. Stack the expression above the result, let both wrap, and give wrapping items a card radius instead of the full pill.
+2. **No favicon.** Declare one in `index.html` so the browser does not request `/favicon.ico`.
+3. **CSP in the Docker build.** Open the nginx build and confirm there are no `Content-Security-Policy` violations in the console.
+
+### F14 audits
+
+Em-dash audit, Pre-Flight Check, accessibility and mobile audits are recorded here when F14 runs.
 
 ## Approved by
 
