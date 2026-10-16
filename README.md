@@ -129,6 +129,16 @@ Every error uses the envelope `{"error":{"code","message"}}`: `400` for `INVALID
 | Backend (`internal/...`) | **99.4%** | [backend.html](docs/coverage/backend.html) |
 | Frontend (169 tests) | **99.7%** | [frontend/index.html](docs/coverage/frontend/index.html) |
 
+<p align="center">
+  <img src="docs/images/coverage-backend.png" alt="Backend coverage by file" width="620"><br>
+  <sub><b>Backend:</b> coverage by file, from the Go coverage report</sub>
+</p>
+
+<p align="center">
+  <img src="docs/images/coverage-frontend.png" alt="Frontend coverage by folder" width="620"><br>
+  <sub><b>Frontend:</b> coverage by folder, from the Vitest coverage report</sub>
+</p>
+
 - **Backend:** table-driven tests for every edge case, `httptest` for every status code, and native Go fuzzing on the parser and the service.
 - **Frontend:** Vitest and Testing Library for the reducer, the API client, the components and full user flows.
 - **Whole stack:** `make smoke` runs 26 HTTP checks, and the acceptance run in [04-test-plan](docs/sdd/04-test-plan.md) covers 9 scenarios in a real browser against the Docker stack.
