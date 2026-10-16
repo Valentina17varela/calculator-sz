@@ -121,17 +121,17 @@ Run against the real app in Chrome: the skill's source linter, axe-core in four 
 | Em-dash and en-dash audit (whole repo, excluding `node_modules`, `.git`, `.agents` and lockfiles) | **Pass** | 0 hits |
 | `lint.mjs` on 11 source files | **0 FAIL, 1 WARN** | `default-font`: Plus Jakarta Sans. Defense: the brand's own face (Satoshi) is a paid font and paid fonts are ruled out; this is the closest free geometric sans, with tabular figures verified |
 | Mobile audit (360 px, our script) | **Pass** | No horizontal scroll, keys 44 px or more, display and history contain their content |
-| Accessibility (axe-core, WCAG 2.0, 2.1 and 2.2 A and AA plus best practices, four app states) | **2 findings** | Below |
+| Accessibility (axe-core, WCAG 2.0, 2.1 and 2.2 A and AA plus best practices, four app states) | **Pass** | 0 violations; 4 keys are listed for manual review and accepted (below) |
 
-Accessibility findings (axe-core), second run after the first fixes:
+Accessibility findings (axe-core), final run:
 
 | Rule | Impact | Status | Detail |
 |---|---|---|---|
-| `page-has-heading-one` | moderate | **Fixed** | The wordmark is now an `<h1>` with the same look |
-| `label-content-name-mismatch` on the history buttons | serious (WCAG 2.5.3) | **Open, cause found** | The label "0.1 + 0.2 0.3, use result" is already contiguous, but the two `<span>` elements have no whitespace between them, so the visible text is read as "0.1 + 0.20.3". Adding a space between the spans fixes it (verified in the browser: 0 violations) and changes nothing visually |
+| `page-has-heading-one` | moderate | **Fixed** | The wordmark is an `<h1>` with the same look |
+| `label-content-name-mismatch` on the history buttons | serious (WCAG 2.5.3) | **Fixed** | The accessible name is now the visible text plus a suffix ("0.1 + 0.2 0.3, use result"), and a space separates the expression from the result so the visible text reads "0.1 + 0.2 0.3". A test asserts the button text |
 | `label-content-name-mismatch` (needs review, 4 nodes) | n/a | Accepted | Keys whose visible text differs from the accessible name: `C` is "Clear", `+/-` is "Negate", `.` is "Decimal point", `^` is "Power" |
 
-Everything else passed: roles, names, landmarks, live regions, language, color contrast and keyboard access (35 to 37 rules per state).
+Result: **0 violations** in the initial, result with history, error and 360 px long-history states (35 to 37 rules passed per state). Roles, names, landmarks, live regions, language, color contrast and keyboard access all pass.
 
 The look (step 8), by reading the screenshots: one numeric focal element, one action color used only on `=`, surfaces separated by tone steps (no lines, shadows or gradients), one round shape applied everywhere, and a calm, readable column at every width. Weaker points: the wordmark is small, desktop leaves a lot of empty page around a 420 px column (intentional for a calculator), and mixed text and icon glyphs on a few keys. The formal 14-pass scored critique of `references/critique.md` was not run.
 

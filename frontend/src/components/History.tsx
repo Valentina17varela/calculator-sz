@@ -30,11 +30,11 @@ export default function History({ items, onReuse }: HistoryProps) {
                 title={reusable ? undefined : 'Too long to reuse'}
                 aria-label={
                   reusable
-                    ? `Use result ${item.result} from ${item.expression}`
-                    : `Result ${item.result} from ${item.expression}, too long to reuse`
+                    ? `${item.expression} ${item.result}, use result`
+                    : `${item.expression} ${item.result}, too long to reuse`
                 }
               >
-                <span className="history-expression">{item.expression}</span>
+                <span className="history-expression">{item.expression}</span>{' '}
                 <span className="history-result t-numerics">{item.result}</span>
               </button>
             </li>

@@ -128,7 +128,7 @@ describe('App', () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(apiResponse('5')))
     render(<App />)
     await pressTwoPlusThreeEquals()
-    const reuse = await screen.findByRole('button', { name: /Use result 5 from 2 \+ 3/ })
+    const reuse = await screen.findByRole('button', { name: '2 + 3 5, use result' })
     const display = screen.getByRole('status', { name: 'Calculator display' })
     // Replace the result on screen first, so reuse has something to change.
     await userEvent.click(screen.getByRole('button', { name: '9' }))

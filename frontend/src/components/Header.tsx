@@ -2,7 +2,7 @@
 export default function Header() {
   return (
     <header className="header">
-      <p className="header-wordmark">Sezzle</p>
+      <h1 className="header-wordmark">Sezzle</h1>
     </header>
   )
 }

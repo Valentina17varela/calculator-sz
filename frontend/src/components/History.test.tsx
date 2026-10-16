@@ -83,7 +83,7 @@ describe('History', () => {
         onReuse={onReuse}
       />,
     )
-    const button = screen.getByRole('button', { name: /Use result 9/ })
+    const button = screen.getByRole('button', { name: /big 9+, use result/ })
     expect(button).toBeEnabled()
   })
 
@@ -98,10 +98,16 @@ describe('History', () => {
     expect(screen.getByRole('button', { name: /too long to reuse/i })).toBeDisabled()
   })
 
+  it('keeps a single space between the visible expression and result', () => {
+    render(<History items={ITEMS} onReuse={() => undefined} />)
+    const button = screen.getByRole('button', { name: '2 + 3 5, use result' })
+    expect(button.textContent).toBe('2 + 3 5')
+  })
+
   it('clicking an item reuses its result', async () => {
     const onReuse = vi.fn()
     render(<History items={ITEMS} onReuse={onReuse} />)
-    await userEvent.click(screen.getByRole('button', { name: /Use result 5 from 2 \+ 3/ }))
+    await userEvent.click(screen.getByRole('button', { name: '2 + 3 5, use result' }))
     expect(onReuse).toHaveBeenCalledWith({ expression: '2 + 3', result: '5' })
   })
 })
