@@ -37,6 +37,29 @@ describe('History', () => {
     expect(shown).toHaveClass('t-numerics')
   })
 
+  it('stacks a 64-digit item in a column, both lines free to wrap', () => {
+    const longResult = '9'.repeat(64)
+    const expression = '9999999999999999 x 9999999999999999'
+    render(
+      <History
+        items={[{ expression, result: longResult }]}
+        onReuse={() => undefined}
+      />,
+    )
+    // The item is a column (flex-direction set in CSS) whose lines both carry
+    // the wrapping classes, so nothing can force the page wider than 360px.
+    const button = screen.getByRole('button', { name: new RegExp(longResult.slice(0, 12)) })
+    expect(button).toHaveClass('history-item')
+    const expressionSpan = screen.getByText(expression)
+    const resultSpan = screen.getByText(longResult)
+    expect(expressionSpan).toHaveClass('history-expression')
+    expect(resultSpan).toHaveClass('history-result')
+    expect(button).toContainElement(expressionSpan)
+    expect(button).toContainElement(resultSpan)
+    // Full text, never trimmed.
+    expect(resultSpan).toHaveTextContent(longResult)
+  })
+
   it('disables results longer than 32 characters', async () => {
     const onReuse = vi.fn()
     const longResult = '9'.repeat(60)

@@ -1,4 +1,4 @@
-import { Delete, Divide, Equal, Minus, Percent, Plus, Radical, Superscript, X } from 'lucide-react'
+import { Delete, Divide, Equal, Minus, Percent, Plus, Radical, X } from 'lucide-react'
 import type { Action, BinaryOp } from '../calculator/types'
 import Key from './Key'
 
@@ -41,7 +41,7 @@ export default function Keypad({ onAction, disabled = false }: KeypadProps) {
       <Key label="=" ariaLabel="Equals" variant="equals" icon={<Equal size={20} aria-hidden />} onPress={() => onAction({ type: 'equals' })} disabled={disabled} />
 
       <div className="keypad-wide" key="power">
-        <Key label="^" ariaLabel="Power" variant="operator" icon={<Superscript size={20} aria-hidden />} onPress={binary('power')} disabled={disabled} />
+        <Key label="^" ariaLabel="Power" variant="operator" onPress={binary('power')} disabled={disabled} />
       </div>
       <div className="keypad-wide" key="backspace">
         <Key label="⌫" ariaLabel="Backspace" variant="action" icon={<Delete size={20} aria-hidden />} onPress={() => onAction({ type: 'backspace' })} disabled={disabled} />

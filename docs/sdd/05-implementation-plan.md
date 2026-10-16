@@ -108,7 +108,7 @@ Tick a box only after reviewing the task against its **Done when** list.
 | [X] | F10 | F | Header (wordmark) and Footer (credit) | F3 | 10 min |
 | [X] | F11 | F | `useKeyboard` hook | F6 | 10 min |
 | [X] | F12 | F | App assembly with error and loading states | F7 to F11 | 15 min |
-| [ ] | F13 | F | Responsive and accessibility pass | F12 | 15 min |
+| [X] | F13 | F | Responsive and accessibility pass | F12 | 15 min |
 | [ ] | F14 | F | Taste audits (Step 3) and fixes | F13 | 15 min |
 | [X] | F15 | F | Client request timeout (10 s) | F4, F6 | 15 min |
 | [ ] | F16 | F | Keep Clear enabled while loading | F8 | 5 min |
@@ -117,7 +117,6 @@ Tick a box only after reviewing the task against its **Done when** list.
 | [X] | I3 | I | Compose and root Makefile | I1, I2 | 10 min |
 | [ ] | D1 | D | Acceptance run (A1 to A8) and coverage | I3 | 15 min |
 | [ ] | D2 | D | Final README (setup, API, decisions, coverage, prompts) | D1 | 15 min |
-| [ ] | D3 | D | Push and share the repository link | D2 | 5 min |
 
 
 ## 4. Task cards
