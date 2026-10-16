@@ -54,3 +54,21 @@ func Power(args []*big.Rat) (*big.Rat, error) {
 func pow(x *big.Int, n int64) *big.Int {
 	return new(big.Int).Exp(x, big.NewInt(n), nil)
 }
+
+var (
+	sqrtScale        = pow(big.NewInt(10), 14)
+	sqrtScaleSquared = pow(big.NewInt(10), 28)
+)
+
+// Sqrt returns the square root of args[0] truncated to 14 decimal digits;
+// FormatDecimal later rounds it to 12.
+func Sqrt(args []*big.Rat) (*big.Rat, error) {
+	x := args[0]
+	if x.Sign() < 0 {
+		return nil, newError(CodeNegativeSquareRoot, "cannot take the square root of a negative number")
+	}
+	scaled := new(big.Int).Mul(x.Num(), sqrtScaleSquared)
+	scaled.Quo(scaled, x.Denom())
+	root := scaled.Sqrt(scaled)
+	return new(big.Rat).SetFrac(root, sqrtScale), nil
+}

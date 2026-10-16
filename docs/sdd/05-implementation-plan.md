@@ -88,7 +88,7 @@ Tick a box only after reviewing the task against its **Done when** list.
 | [X] | B3 | B | Add, subtract, multiply | B2 | 10 min |
 | [X] | B4 | B | Divide | B2 | 10 min |
 | [X] | B5 | B | Power | B2 | 15 min |
-| [ ] | B6 | B | Square root | B2 | 20 min |
+| [X] | B6 | B | Square root | B2 | 20 min |
 | [ ] | B7 | B | Percent | B2 | 10 min |
 | [ ] | B8 | B | Registry and service | B3 to B7 | 15 min |
 | [ ] | B9 | B | HTTP error envelope and mapping | B1 | 15 min |
