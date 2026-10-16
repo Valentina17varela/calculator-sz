@@ -94,7 +94,7 @@ Tick a box only after reviewing the task against its **Done when** list.
 | [X] | B9 | B | HTTP error envelope and mapping | B1 | 15 min |
 | [X] | B10 | B | `POST /api/v1/calculate` handler | B8, B9 | 20 min |
 | [X] | B11 | B | Operations list and health handlers, 405 | B8 | 10 min |
-| [ ] | B12 | B | Middleware: recovery, logging, body limit | B10, B11 | 15 min |
+| [X] | B12 | B | Middleware: recovery, logging, body limit | B10, B11 | 15 min |
 | [ ] | B13 | B | `main.go`, config, graceful shutdown | B12 | 10 min |
 | [X] | F1 | F | Frontend scaffold and tooling | S1 | 15 min |
 | [X] | F2 | F | Design read with taste skill (Step 1) | F1 | 10 min |

@@ -119,7 +119,8 @@ operand (`INVALID_OPERAND`), run the function, format the result (`OUT_OF_RANGE`
 - Request body: `http.MaxBytesReader` at 1 KB (`413 PAYLOAD_TOO_LARGE`), `json.Decoder.DisallowUnknownFields`, exactly one JSON value (`INVALID_JSON` otherwise).
 - Status mapping: `INVALID_*` and `UNKNOWN_OPERATION` map to 400, domain errors map to 422.
 - Unknown core errors map to `500 INTERNAL_ERROR` with a generic message; details go to the log only.
-- Middleware order: recovery, request logging (method, path, status, duration), then the mux.
+- Middleware order (outermost first): request logging (method, path, status, duration), panic recovery, body limit, then the mux. Logging is outermost so a recovered panic is still logged as a 500.
+- Body limit: the middleware reads the whole body up front, capped at 1 KB with `http.MaxBytesReader`, so an oversized request is always `413` and never a parse error found earlier in the stream. Side effect: an oversized body to a path with the wrong method answers `413` before `405`.
 - Config: `PORT` (default `8080`). Graceful shutdown on SIGINT/SIGTERM with a 5 second timeout.
 - No CORS headers: the frontend reaches the API through a proxy (see [00-overview](00-overview.md)).
 

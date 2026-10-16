@@ -1,13 +1,18 @@
 package httpapi
 
 import (
+	"log/slog"
 	"net/http"
 
 	"github.com/Valentina17varela/sezzle-calculator/backend/internal/calc"
 )
 
-// NewRouter wires the API routes to the given calculation service.
+// NewRouter wires the API routes and middleware to the given calculation service.
 func NewRouter(svc *calc.Service) http.Handler {
+	return withMiddleware(slog.Default(), newMux(svc))
+}
+
+func newMux(svc *calc.Service) *http.ServeMux {
 	h := &handler{svc: svc}
 	mux := http.NewServeMux()
 	mux.HandleFunc("POST /api/v1/calculate", h.calculate)
