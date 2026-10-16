@@ -21,7 +21,6 @@ backend/coverage.out
 # Node (frontend)
 node_modules/
 frontend/dist/
-frontend/coverage/
 *.tsbuildinfo
 npm-debug.log*
 .vite/

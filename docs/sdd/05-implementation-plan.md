@@ -80,9 +80,9 @@ flowchart LR
 
 Tick a box only after reviewing the task against its **Done when** list.
 
-| ✔ | ID | Lane | Task | Depends on | Est. |
+| X | ID | Lane | Task | Depends on | Est. |
 |---|---|---|---|---|---|
-| [ ] | S1 | S | Create repo, first docs commit | none | 5 min |
+| [X] | S1 | S | Create repo, first docs commit | none | 5 min |
 | [ ] | B1 | B | Go module and error types | S1 | 10 min |
 | [ ] | B2 | B | Decimal parse and format | B1 | 20 min |
 | [ ] | B3 | B | Add, subtract, multiply | B2 | 10 min |
@@ -179,24 +179,24 @@ fits the time box. Cut order if time is short: B6, B5, then F9 (history) and F11
 
 #### B9. HTTP error envelope and mapping
 - **Spec:** [01 section 5](01-api-spec.md), [02 section 6](02-backend-design.md)
-- **Files:** `internal/http_api/errors.go`, `internal/http_api/errors_test.go`
+- **Files:** `internal/httpapi/errors.go`, `internal/httpapi/errors_test.go`
 - **Done when:** `writeError(w, status, code, msg)` writes `{"error":{"code","message"}}`; `statusFor(code)` maps 400, 422, 405, 413, 500 per the spec; unknown errors become `INTERNAL_ERROR` without leaking details.
-- **Verify:** `go test ./internal/http_api/... -run Error`
+- **Verify:** `go test ./internal/httpapi/... -run Error`
 
 #### B10. `POST /api/v1/calculate` handler
-- **Files:** `internal/http_api/handlers.go`, `internal/http_api/router.go`, `internal/http_api/calculate_test.go`
+- **Files:** `internal/httpapi/handlers.go`, `internal/httpapi/router.go`, `internal/httpapi/calculate_test.go`
 - **Done when:** decodes with `DisallowUnknownFields`, exactly one JSON value; returns the response from [01 section 4](01-api-spec.md); `httptest` cases for 200 (each operation), 400 (`INVALID_JSON`, `UNKNOWN_OPERATION`, `INVALID_OPERAND_COUNT`, `INVALID_OPERAND`), 422 (each domain error).
-- **Verify:** `go test ./internal/http_api/... -run Calculate`
+- **Verify:** `go test ./internal/httpapi/... -run Calculate`
 
 #### B11. Operations list and health handlers, 405
-- **Files:** `internal/http_api/handlers.go` (append), `internal/http_api/router.go`, `internal/http_api/misc_test.go`
+- **Files:** `internal/httpapi/handlers.go` (append), `internal/httpapi/router.go`, `internal/httpapi/misc_test.go`
 - **Done when:** `GET /api/v1/operations` returns the list; `GET /health` returns `{"status":"ok"}`; wrong method returns 405 envelope with `Allow` header.
-- **Verify:** `go test ./internal/http_api/... -run "Operations|Health|Method"`
+- **Verify:** `go test ./internal/httpapi/... -run "Operations|Health|Method"`
 
 #### B12. Middleware
-- **Files:** `internal/http_api/middleware.go`, `internal/http_api/middleware_test.go`, `internal/http_api/router.go`
+- **Files:** `internal/httpapi/middleware.go`, `internal/httpapi/middleware_test.go`, `internal/httpapi/router.go`
 - **Done when:** panic in a handler returns 500 JSON and the server keeps running; request log line has method, path, status, duration; body over 1 KB returns 413 `PAYLOAD_TOO_LARGE`.
-- **Verify:** `go test ./internal/http_api/... -race -cover` (at least 90%)
+- **Verify:** `go test ./internal/httpapi/... -race -cover` (at least 90%)
 
 #### B13. `main.go`, config, graceful shutdown
 - **Files:** `cmd/server/main.go`
@@ -207,7 +207,7 @@ fits the time box. Cut order if time is short: B6, B5, then F9 (history) and F11
 
 #### F1. Frontend scaffold and tooling
 - **Spec:** [03 section 2](03-frontend-design.md)
-- **Files:** Vite React TS template, `vite.config.ts` (proxy `/api` to `http://localhost:8080`), Vitest, Testing Library, `@vitest/coverage-v8`, ESLint, npm scripts `dev`, `build`, `test`, `test:coverage`, `lint`.
+- **Files:** Vite React TS template, `vite.config.ts` (proxy `/api` to `http://localhost:8080`), Vitest, Testing Library, `@vitest/coverage-v8` (HTML reporter writing to `../docs/coverage/frontend`), ESLint, npm scripts `dev`, `build`, `test`, `test:coverage`, `lint`.
 - **Done when:** empty app builds; one smoke test passes.
 - **Verify:** `cd frontend && npm run lint && npm run test -- --run && npm run build`
 
@@ -303,7 +303,7 @@ fits the time box. Cut order if time is short: B6, B5, then F9 (history) and F11
 #### D1. Acceptance run and coverage
 - **Spec:** [04](04-test-plan.md)
 - **Done when:** scenarios A1 to A8 pass and are recorded (table with Pass/Fail); backend coverage at least 90%, frontend at least 85%.
-- **Verify:** `make coverage` output pasted into the README in D2.
+- **Verify:** `make coverage` regenerates `docs/coverage/backend.html` and `docs/coverage/frontend/index.html` (committed, overwritten each run); the summary is pasted into the README in D2.
 
 #### D2. Final README
 - **Spec:** [00 section 6](00-overview.md) (HR checklist)

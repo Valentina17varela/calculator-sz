@@ -4,7 +4,7 @@ Implements [01-api-spec.md](01-api-spec.md) · Language: Go 1.22+ (standard libr
 
 ## 1. Principles
 
-- **Pure core, thin edges.** All math lives in `internal/calc` with no HTTP knowledge. HTTP lives in `internal/http_api` with no math.
+- **Pure core, thin edges.** All math lives in `internal/calc` with no HTTP knowledge. HTTP lives in `internal/httpapi` with no math.
 - **Exact arithmetic** with `math/big.Rat` (standard library). No floats anywhere in the core.
 - **Errors are values.** The core returns typed errors with a stable `Code`; the HTTP layer maps code to status.
 - **Easy to extend.** A new operation is one function plus one registry entry.
@@ -22,7 +22,7 @@ backend/
       registry.go               # name -> {arity, fn}
       service.go                # Calculate(op, operands) -> result
       *_test.go
-    http_api/
+    httpapi/
       router.go                 # routes, method handling
       handlers.go               # calculate, operations, healthz
       errors.go                 # error envelope + status mapping
@@ -34,7 +34,7 @@ backend/
 
 ```mermaid
 flowchart TB
-    M["cmd/server/main.go"] --> R["http_api.Router"]
+    M["cmd/server/main.go"] --> R["httpapi.Router"]
     R --> MW["middleware<br/>recover, log, body limit"]
     MW --> H["handlers"]
     H --> SVC["calc.Service"]

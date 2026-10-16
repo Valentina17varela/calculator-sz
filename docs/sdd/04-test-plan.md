@@ -6,7 +6,7 @@
 | Layer | Tool | Style | Target |
 |---|---|---|---|
 | Backend core (`calc`) | `go test` | Table-driven, one row per edge case in [02-backend-design](02-backend-design.md) | 95% statements |
-| Backend HTTP (`http_api`) | `go test` + `httptest` | One test per status code and error code | 90% statements |
+| Backend HTTP (`httpapi`) | `go test` + `httptest` | One test per status code and error code | 90% statements |
 | Frontend reducer | Vitest | Pure function tests, one per rule in [03-frontend-design](03-frontend-design.md) | 95% |
 | Frontend API client | Vitest + mocked `fetch` | Success, each error code, network, abort | 90% |
 | Frontend components | Vitest + Testing Library | User-level flows | 80% |
@@ -27,12 +27,12 @@ Overall target: **backend 90%+, frontend 85%+**. Coverage is a guide; correctnes
 cd backend
 go test ./... -race -coverprofile=coverage.out
 go tool cover -func=coverage.out          # summary in the terminal
-go tool cover -html=coverage.out -o coverage.html
+go tool cover -html=coverage.out -o ../docs/coverage/backend.html   # versioned, overwritten each run
 
 # Frontend
 cd frontend
 npm run test                               # watch mode
-npm run test:coverage                      # one run, writes frontend/coverage/
+npm run test:coverage                      # one run, writes ../docs/coverage/frontend/ (versioned, overwritten)
 
 # Both (from the repo root)
 make test
@@ -55,4 +55,9 @@ make coverage
 ## 5. Reporting
 
 - A coverage summary table is added to the README after the final run.
-- The HTML coverage report is generated locally and added to the README.
+- The HTML coverage reports are **versioned** so reviewers can open the original report:
+  - `docs/coverage/backend.html`
+  - `docs/coverage/frontend/index.html`
+- They live at fixed paths and are **overwritten on every `make coverage` run**, so the repo always holds the latest version (git history keeps the older ones).
+- `coverage.out` (the raw Go profile) is not versioned.
+- The README links to both reports next to the summary table.
