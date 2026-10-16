@@ -99,7 +99,7 @@ Tick a box only after reviewing the task against its **Done when** list.
 | [X] | F1 | F | Frontend scaffold and tooling | S1 | 15 min |
 | [X] | F2 | F | Design read with taste skill (Step 1) | F1 | 10 min |
 | [X] | F3 | F | Theme tokens and base styles | F2 | 15 min |
-| [ ] | F4 | F | API client and types | F1 | 15 min |
+| [X] | F4 | F | API client and types | F1 | 15 min |
 | [ ] | F5 | F | Calculator reducer (pure) | F1 | 25 min |
 | [ ] | F6 | F | `useCalculator` hook | F4, F5 | 15 min |
 | [ ] | F7 | F | Display component | F3 | 10 min |

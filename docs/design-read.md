@@ -31,6 +31,7 @@ Roles are an inference from that usage; the owner approved this palette.
 | Ground | `#FFFFFF` | page background | n/a |
 | Ink (text, deep purple) | `#201733` | most used dark purple (15 uses in HTML); close neighbors `#382757`, `#241b3b` | 17.05 on white |
 | Action purple (equals key, links, focus ring) | `#8333D4` | buttons and text in CSS (11 uses in HTML) | white on it: 6.20 |
+| Action hover (equals key and links on hover) | `#6D2AB3` | darker step of the action purple, derived (not measured); accepted by the owner | white on it: 7.98 |
 | Lavender (surfaces, operator keys) | `#F2E6FF` | section tints (26 uses in HTML) | ink on it: 14.24 |
 | Mint (result highlight, success) | `#9FF4D9` | most repeated brand color (42 uses in HTML) | ink on it: 13.33 |
 | Neutral surface | `#F8F8F8` | background in CSS | `#4F4F4F` on it: 7.71 |
@@ -40,6 +41,7 @@ Roles are an inference from that usage; the owner approved this palette.
 Rules for use:
 
 - Text pairs must reach WCAG AA (4.5:1 or more). All pairs above do, except Error, which is checked in F13.
+- Focus ring: `:focus-visible` rounds only `button` elements; links and other elements keep their own shape (to apply in F13).
 - Purple on lavender (`#8333D4` on `#F2E6FF`) is 5.17, allowed for text of 16px and above.
 - Mint is never used for text on white; it is a fill with ink text on top.
 - No pink, no gradients, no glow, no shadows. Tone steps separate surfaces.
