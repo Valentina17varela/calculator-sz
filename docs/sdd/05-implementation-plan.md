@@ -111,11 +111,11 @@ Tick a box only after reviewing the task against its **Done when** list.
 | [X] | F13 | F | Responsive and accessibility pass | F12 | 15 min |
 | [ ] | F14 | F | Taste audits (Step 3) and fixes | F13 | 15 min |
 | [X] | F15 | F | Client request timeout (10 s) | F4, F6 | 15 min |
-| [ ] | F16 | F | Keep Clear enabled while loading | F8 | 5 min |
+| [X] | F16 | F | Keep Clear enabled while loading | F8 | 5 min |
 | [X] | I1 | I | Backend Dockerfile | B13 | 10 min |
 | [X] | I2 | I | Frontend Dockerfile and nginx proxy | F14 | 10 min |
 | [X] | I3 | I | Compose and root Makefile | I1, I2 | 10 min |
-| [ ] | D1 | D | Acceptance run (A1 to A8) and coverage | I3 | 15 min |
+| [x] | D1 | D | Acceptance run (A1 to A8) and coverage | I3 | 15 min |
 | [ ] | D2 | D | Final README (setup, API, decisions, coverage, prompts) | D1 | 15 min |
 
 

@@ -93,11 +93,24 @@ Contrast of the colors used by the components (WCAG AA needs 4.5 or more for tex
 | Muted text on the display surface and on white | 7.71 and 8.19 | Pass |
 | Ink on lavender keys | 14.24 | Pass |
 
-Open findings before F13 can close:
+Findings from run 1 (all closed in run 2):
 
-1. **History item layout (blocking).** A long expression and result break the layout. Stack the expression above the result, let both wrap, and give wrapping items a card radius instead of the full pill.
-2. **No favicon.** Declare one in `index.html` so the browser does not request `/favicon.ico`.
-3. **CSP in the Docker build.** Open the nginx build and confirm there are no `Content-Security-Policy` violations in the console.
+1. History item layout: stacked expression above result in a card, both wrap.
+2. No favicon: an inline SVG favicon is declared in `index.html`.
+3. CSP in the Docker build: checked in run 2 below.
+
+### F13 audit, run 2 (after the fixes; also run against the nginx image with the strict CSP)
+
+| Check | 360 px | 768 px | 1280 px |
+|---|---|---|---|
+| No horizontal page scroll, initial state | Pass | Pass | Pass |
+| No horizontal page scroll with a 64 digit history entry | Pass | Pass | Pass |
+| Every button at least 44 x 44 px (22 keys) | Pass | Pass | Pass |
+| Display of `2 ^ 100` and of a 64 digit result fully visible | Pass | Pass | Pass |
+| History item contains its content (no overflow) | Pass | Pass | Pass |
+| Visible focus ring (3 px solid, 2 px offset) | Pass | Pass | Pass |
+| Console: only the expected `422` of the `1 / 0` test, no `404` | Pass | Pass | Pass |
+| `Content-Security-Policy` (`style-src 'self'`, no `unsafe-inline`): no violations, font and favicon load | Pass | Pass | Pass |
 
 ### F14 audits
 

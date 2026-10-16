@@ -276,7 +276,7 @@ Every error uses the same envelope, `{"error":{"code","message"}}`:
 | Area | Coverage | Report |
 |---|---|---|
 | Backend (`internal/...`) | **99.4%** | [docs/coverage/backend.html](docs/coverage/backend.html) |
-| Frontend | **99.7%** (provisional, confirmed in D1) | [docs/coverage/frontend/index.html](docs/coverage/frontend/index.html) |
+| Frontend | **99.7%** (168 tests) | [docs/coverage/frontend/index.html](docs/coverage/frontend/index.html) |
 
 The backend figure covers `./internal/...`; `cmd/server` is the entrypoint wiring and is checked by the smoke test instead. Reports live at fixed paths and are overwritten by `make coverage`.
 

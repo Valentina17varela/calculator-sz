@@ -1,0 +1,685 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>calc: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">github.com/Valentina17varela/sezzle-calculator/backend/internal/calc/decimal.go (100.0%)</option>
+				
+				<option value="file1">github.com/Valentina17varela/sezzle-calculator/backend/internal/calc/errors.go (100.0%)</option>
+				
+				<option value="file2">github.com/Valentina17varela/sezzle-calculator/backend/internal/calc/operations.go (100.0%)</option>
+				
+				<option value="file3">github.com/Valentina17varela/sezzle-calculator/backend/internal/calc/registry.go (100.0%)</option>
+				
+				<option value="file4">github.com/Valentina17varela/sezzle-calculator/backend/internal/calc/service.go (100.0%)</option>
+				
+				<option value="file5">github.com/Valentina17varela/sezzle-calculator/backend/internal/httpapi/errors.go (100.0%)</option>
+				
+				<option value="file6">github.com/Valentina17varela/sezzle-calculator/backend/internal/httpapi/handlers.go (97.2%)</option>
+				
+				<option value="file7">github.com/Valentina17varela/sezzle-calculator/backend/internal/httpapi/middleware.go (100.0%)</option>
+				
+				<option value="file8">github.com/Valentina17varela/sezzle-calculator/backend/internal/httpapi/router.go (100.0%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">no coverage</span>
+				<span class="cov1">low coverage</span>
+				<span class="cov2">*</span>
+				<span class="cov3">*</span>
+				<span class="cov4">*</span>
+				<span class="cov5">*</span>
+				<span class="cov6">*</span>
+				<span class="cov7">*</span>
+				<span class="cov8">*</span>
+				<span class="cov9">*</span>
+				<span class="cov10">high coverage</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package calc
+
+import (
+        "math/big"
+        "regexp"
+        "strings"
+)
+
+const (
+        maxOperandLen   = 32
+        maxResultBits   = 4096
+        formatPrecision = 12
+)
+
+var decimalPattern = regexp.MustCompile(`^-?\d+(\.\d+)?$`)
+
+// ParseDecimal strictly parses a decimal string into an exact rational.
+func ParseDecimal(s string) (*big.Rat, error) <span class="cov10" title="274">{
+        if len(s) &gt; maxOperandLen || !decimalPattern.MatchString(s) </span><span class="cov6" title="39">{
+                return nil, newError(CodeInvalidOperand, "operand is not a valid decimal number")
+        }</span>
+        // decimalPattern only admits strings that SetString always accepts.
+        <span class="cov9" title="235">r, _ := new(big.Rat).SetString(s)
+        return r, nil</span>
+}
+
+// FormatDecimal renders r with up to 12 decimal places, trailing zeros trimmed.
+func FormatDecimal(r *big.Rat) (string, error) <span class="cov8" title="116">{
+        if r.Num().BitLen() &gt; maxResultBits || r.Denom().BitLen() &gt; maxResultBits </span><span class="cov3" title="6">{
+                return "", newError(CodeOutOfRange, "result is out of range")
+        }</span>
+        <span class="cov8" title="110">s := r.FloatString(formatPrecision)
+        s = strings.TrimRight(s, "0")
+        s = strings.TrimRight(s, ".")
+        if s == "-0" </span><span class="cov2" title="2">{
+                return "0", nil
+        }</span>
+        <span class="cov8" title="108">return s, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package calc
+
+// Code is a stable, machine-readable error identifier shared with the HTTP API.
+type Code string
+
+const (
+        CodeInvalidJSON         Code = "INVALID_JSON"
+        CodeUnknownOperation    Code = "UNKNOWN_OPERATION"
+        CodeInvalidOperandCount Code = "INVALID_OPERAND_COUNT"
+        CodeInvalidOperand      Code = "INVALID_OPERAND"
+        CodeDivisionByZero      Code = "DIVISION_BY_ZERO"
+        CodeNegativeSquareRoot  Code = "NEGATIVE_SQUARE_ROOT"
+        CodeNonIntegerExponent  Code = "NON_INTEGER_EXPONENT"
+        CodeOutOfRange          Code = "OUT_OF_RANGE"
+        CodeMethodNotAllowed    Code = "METHOD_NOT_ALLOWED"
+        CodePayloadTooLarge     Code = "PAYLOAD_TOO_LARGE"
+)
+
+// Error is a typed error carrying a stable Code.
+type Error struct {
+        Code    Code
+        Message string
+}
+
+func (e *Error) Error() string <span class="cov1" title="1">{ return e.Message }</span>
+
+func newError(code Code, msg string) *Error <span class="cov10" title="120">{
+        return &amp;Error{Code: code, Message: msg}
+}</span>
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package calc
+
+import "math/big"
+
+// Add returns args[0] + args[1].
+func Add(args []*big.Rat) (*big.Rat, error) <span class="cov6" title="11">{
+        return new(big.Rat).Add(args[0], args[1]), nil
+}</span>
+
+// Subtract returns args[0] - args[1].
+func Subtract(args []*big.Rat) (*big.Rat, error) <span class="cov5" title="6">{
+        return new(big.Rat).Sub(args[0], args[1]), nil
+}</span>
+
+// Multiply returns args[0] * args[1].
+func Multiply(args []*big.Rat) (*big.Rat, error) <span class="cov6" title="12">{
+        return new(big.Rat).Mul(args[0], args[1]), nil
+}</span>
+
+// Divide returns args[0] / args[1] exactly; rounding happens only on format.
+func Divide(args []*big.Rat) (*big.Rat, error) <span class="cov8" title="20">{
+        if args[1].Sign() == 0 </span><span class="cov5" title="7">{
+                return nil, newError(CodeDivisionByZero, "cannot divide by zero")
+        }</span>
+        <span class="cov7" title="13">return new(big.Rat).Quo(args[0], args[1]), nil</span>
+}
+
+const maxExponent = 100
+
+// Power returns args[0] ^ args[1]. The exponent must be an integer with
+// absolute value at most 100; a negative exponent gives the reciprocal.
+func Power(args []*big.Rat) (*big.Rat, error) <span class="cov9" title="37">{
+        base, exp := args[0], args[1]
+        if !exp.IsInt() </span><span class="cov4" title="4">{
+                return nil, newError(CodeNonIntegerExponent, "exponent must be an integer")
+        }</span>
+        <span class="cov9" title="33">if exp.Num().CmpAbs(big.NewInt(maxExponent)) &gt; 0 </span><span class="cov5" title="7">{
+                return nil, newError(CodeOutOfRange, "exponent must be between -100 and 100")
+        }</span>
+        <span class="cov8" title="26">n := exp.Num().Int64()
+        if n == 0 </span><span class="cov2" title="2">{
+                return big.NewRat(1, 1), nil
+        }</span>
+        <span class="cov8" title="24">if n &lt; 0 </span><span class="cov6" title="10">{
+                if base.Sign() == 0 </span><span class="cov4" title="4">{
+                        return nil, newError(CodeDivisionByZero, "cannot raise zero to a negative power")
+                }</span>
+                <span class="cov5" title="6">n = -n
+                return new(big.Rat).SetFrac(pow(base.Denom(), n), pow(base.Num(), n)), nil</span>
+        }
+        <span class="cov7" title="14">return new(big.Rat).SetFrac(pow(base.Num(), n), pow(base.Denom(), n)), nil</span>
+}
+
+func pow(x *big.Int, n int64) *big.Int <span class="cov10" title="42">{
+        return new(big.Int).Exp(x, big.NewInt(n), nil)
+}</span>
+
+var (
+        sqrtScale        = pow(big.NewInt(10), 14)
+        sqrtScaleSquared = pow(big.NewInt(10), 28)
+)
+
+// Sqrt returns the square root of args[0] truncated to 14 decimal digits;
+// FormatDecimal later rounds it to 12.
+func Sqrt(args []*big.Rat) (*big.Rat, error) <span class="cov8" title="23">{
+        x := args[0]
+        if x.Sign() &lt; 0 </span><span class="cov4" title="5">{
+                return nil, newError(CodeNegativeSquareRoot, "cannot take the square root of a negative number")
+        }</span>
+        <span class="cov7" title="18">scaled := new(big.Int).Mul(x.Num(), sqrtScaleSquared)
+        scaled.Quo(scaled, x.Denom())
+        root := scaled.Sqrt(scaled)
+        return new(big.Rat).SetFrac(root, sqrtScale), nil</span>
+}
+
+// Percent takes [p, base] and returns p percent of base: base * p / 100.
+func Percent(args []*big.Rat) (*big.Rat, error) <span class="cov8" title="19">{
+        r := new(big.Rat).Mul(args[1], args[0])
+        return r.Quo(r, big.NewRat(100, 1)), nil
+}</span>
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package calc
+
+import "math/big"
+
+// OperationFunc computes a result from already-parsed operands.
+type OperationFunc func(args []*big.Rat) (*big.Rat, error)
+
+// Operation describes one supported calculation.
+type Operation struct {
+        Name  string
+        Arity int
+        Fn    OperationFunc
+}
+
+// Registry maps an operation name to its definition.
+type Registry map[string]Operation
+
+func defaultRegistry() Registry <span class="cov5" title="7">{
+        ops := []Operation{
+                {Name: "add", Arity: 2, Fn: Add},
+                {Name: "subtract", Arity: 2, Fn: Subtract},
+                {Name: "multiply", Arity: 2, Fn: Multiply},
+                {Name: "divide", Arity: 2, Fn: Divide},
+                {Name: "power", Arity: 2, Fn: Power},
+                {Name: "sqrt", Arity: 1, Fn: Sqrt},
+                {Name: "percent", Arity: 2, Fn: Percent},
+        }
+        reg := make(Registry, len(ops))
+        for _, op := range ops </span><span class="cov10" title="49">{
+                reg[op.Name] = op
+        }</span>
+        <span class="cov5" title="7">return reg</span>
+}
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package calc
+
+import (
+        "fmt"
+        "math/big"
+        "sort"
+)
+
+// OperationInfo is the public description of a supported operation.
+type OperationInfo struct {
+        Name  string
+        Arity int
+}
+
+// Service runs calculations on decimal strings.
+type Service struct {
+        reg Registry
+}
+
+func NewService() *Service <span class="cov4" title="7">{
+        return &amp;Service{reg: defaultRegistry()}
+}</span>
+
+// Calculate looks up the operation, validates operands, runs it and formats the result.
+func (s *Service) Calculate(op string, operands []string) (string, error) <span class="cov9" title="82">{
+        operation, ok := s.reg[op]
+        if !ok </span><span class="cov4" title="7">{
+                return "", newError(CodeUnknownOperation, fmt.Sprintf("unknown operation %q", op))
+        }</span>
+        <span class="cov9" title="75">if len(operands) != operation.Arity </span><span class="cov7" title="24">{
+                return "", newError(CodeInvalidOperandCount,
+                        fmt.Sprintf("operation %q expects %d operand(s), got %d", op, operation.Arity, len(operands)))
+        }</span>
+
+        <span class="cov8" title="51">args := make([]*big.Rat, len(operands))
+        for i, raw := range operands </span><span class="cov10" title="87">{
+                r, err := ParseDecimal(raw)
+                if err != nil </span><span class="cov6" title="14">{
+                        return "", newError(CodeInvalidOperand,
+                                fmt.Sprintf("operand %d is not a valid decimal number", i+1))
+                }</span>
+                <span class="cov9" title="73">args[i] = r</span>
+        }
+
+        <span class="cov8" title="37">result, err := operation.Fn(args)
+        if err != nil </span><span class="cov5" title="9">{
+                return "", err
+        }</span>
+        <span class="cov7" title="28">return FormatDecimal(result)</span>
+}
+
+// Operations lists supported operations sorted by name.
+func (s *Service) Operations() []OperationInfo <span class="cov3" title="4">{
+        infos := make([]OperationInfo, 0, len(s.reg))
+        for _, op := range s.reg </span><span class="cov7" title="28">{
+                infos = append(infos, OperationInfo{Name: op.Name, Arity: op.Arity})
+        }</span>
+        <span class="cov3" title="4">sort.Slice(infos, func(i, j int) bool </span><span class="cov9" title="61">{ return infos[i].Name &lt; infos[j].Name }</span>)
+        <span class="cov3" title="4">return infos</span>
+}
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package httpapi
+
+import (
+        "encoding/json"
+        "errors"
+        "log/slog"
+        "net/http"
+
+        "github.com/Valentina17varela/sezzle-calculator/backend/internal/calc"
+)
+
+const codeInternalError calc.Code = "INTERNAL_ERROR"
+
+const internalErrorMessage = "internal server error"
+
+type errorBody struct {
+        Code    calc.Code `json:"code"`
+        Message string    `json:"message"`
+}
+
+type errorEnvelope struct {
+        Error errorBody `json:"error"`
+}
+
+// statusFor maps an error code to its HTTP status. Unmapped codes are 500.
+func statusFor(code calc.Code) int <span class="cov9" title="59">{
+        switch code </span>{
+        case calc.CodeInvalidJSON,
+                calc.CodeUnknownOperation,
+                calc.CodeInvalidOperandCount,
+                calc.CodeInvalidOperand:<span class="cov8" title="37">
+                return http.StatusBadRequest</span>
+        case calc.CodeDivisionByZero,
+                calc.CodeNegativeSquareRoot,
+                calc.CodeNonIntegerExponent,
+                calc.CodeOutOfRange:<span class="cov6" title="14">
+                return http.StatusUnprocessableEntity</span>
+        case calc.CodeMethodNotAllowed:<span class="cov1" title="1">
+                return http.StatusMethodNotAllowed</span>
+        case calc.CodePayloadTooLarge:<span class="cov1" title="1">
+                return http.StatusRequestEntityTooLarge</span>
+        default:<span class="cov4" title="6">
+                return http.StatusInternalServerError</span>
+        }
+}
+
+// writeError writes the standard JSON error envelope.
+func writeError(w http.ResponseWriter, status int, code calc.Code, msg string) <span class="cov10" title="70">{
+        w.Header().Set("Content-Type", "application/json")
+        w.WriteHeader(status)
+        _ = json.NewEncoder(w).Encode(errorEnvelope{Error: errorBody{Code: code, Message: msg}})
+}</span>
+
+// writeCalcError maps err to the error envelope. Anything that is not a
+// mapped *calc.Error becomes a generic 500; the details go to the log only.
+func writeCalcError(w http.ResponseWriter, err error) <span class="cov9" title="49">{
+        var calcErr *calc.Error
+        if errors.As(err, &amp;calcErr) </span><span class="cov9" title="46">{
+                if status := statusFor(calcErr.Code); status != http.StatusInternalServerError </span><span class="cov8" title="43">{
+                        writeError(w, status, calcErr.Code, calcErr.Message)
+                        return
+                }</span>
+        }
+        <span class="cov4" title="6">slog.Error("internal error", "error", err)
+        writeError(w, http.StatusInternalServerError, codeInternalError, internalErrorMessage)</span>
+}
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package httpapi
+
+import (
+        "encoding/json"
+        "errors"
+        "io"
+        "net/http"
+
+        "github.com/Valentina17varela/sezzle-calculator/backend/internal/calc"
+)
+
+type handler struct {
+        svc *calc.Service
+}
+
+type calculateRequest struct {
+        Operation string   `json:"operation"`
+        Operands  []string `json:"operands"`
+}
+
+type calculateResponse struct {
+        Operation string   `json:"operation"`
+        Operands  []string `json:"operands"`
+        Result    string   `json:"result"`
+}
+
+func (h *handler) calculate(w http.ResponseWriter, r *http.Request) <span class="cov7" title="50">{
+        var req calculateRequest
+        if err := decodeBody(r, &amp;req); err != nil </span><span class="cov5" title="13">{
+                writeCalcError(w, err)
+                return
+        }</span>
+
+        <span class="cov7" title="37">result, err := h.svc.Calculate(req.Operation, req.Operands)
+        if err != nil </span><span class="cov6" title="25">{
+                writeCalcError(w, err)
+                return
+        }</span>
+
+        <span class="cov5" title="12">writeJSON(w, http.StatusOK, calculateResponse{
+                Operation: req.Operation,
+                Operands:  req.Operands,
+                Result:    result,
+        })</span>
+}
+
+// decodeBody reads exactly one JSON value into dst and rejects unknown fields.
+func decodeBody(r *http.Request, dst any) error <span class="cov7" title="50">{
+        dec := json.NewDecoder(r.Body)
+        dec.DisallowUnknownFields()
+        if err := dec.Decode(dst); err != nil </span><span class="cov4" title="10">{
+                return bodyError(err)
+        }</span>
+
+        <span class="cov7" title="40">var extra json.RawMessage
+        err := dec.Decode(&amp;extra)
+        if err == io.EOF </span><span class="cov7" title="37">{
+                return nil
+        }</span>
+        <span class="cov2" title="3">if err == nil </span><span class="cov1" title="1">{
+                err = errors.New("unexpected data after JSON value")
+        }</span>
+        <span class="cov2" title="3">return bodyError(err)</span>
+}
+
+func bodyError(err error) *calc.Error <span class="cov5" title="13">{
+        var tooLarge *http.MaxBytesError
+        if errors.As(err, &amp;tooLarge) </span><span class="cov0" title="0">{
+                return &amp;calc.Error{Code: calc.CodePayloadTooLarge, Message: "request body is too large"}
+        }</span>
+        <span class="cov5" title="13">return &amp;calc.Error{
+                Code:    calc.CodeInvalidJSON,
+                Message: "request body must be a single JSON object with a string operation and string operands",
+        }</span>
+}
+
+type operationItem struct {
+        Name  string `json:"name"`
+        Arity int    `json:"arity"`
+}
+
+type operationsResponse struct {
+        Operations []operationItem `json:"operations"`
+}
+
+type healthResponse struct {
+        Status string `json:"status"`
+}
+
+func (h *handler) operations(w http.ResponseWriter, r *http.Request) <span class="cov1" title="1">{
+        infos := h.svc.Operations()
+        items := make([]operationItem, len(infos))
+        for i, info := range infos </span><span class="cov4" title="7">{
+                items[i] = operationItem{Name: info.Name, Arity: info.Arity}
+        }</span>
+        <span class="cov1" title="1">writeJSON(w, http.StatusOK, operationsResponse{Operations: items})</span>
+}
+
+func (h *handler) health(w http.ResponseWriter, r *http.Request) <span class="cov2" title="2">{
+        writeJSON(w, http.StatusOK, healthResponse{Status: "ok"})
+}</span>
+
+// methodNotAllowed answers any method not registered for a known path.
+func methodNotAllowed(allow string) http.HandlerFunc <span class="cov10" title="207">{
+        return func(w http.ResponseWriter, r *http.Request) </span><span class="cov4" title="8">{
+                w.Header().Set("Allow", allow)
+                writeError(w, http.StatusMethodNotAllowed, calc.CodeMethodNotAllowed, "method not allowed")
+        }</span>
+}
+
+func writeJSON(w http.ResponseWriter, status int, v any) <span class="cov5" title="15">{
+        w.Header().Set("Content-Type", "application/json")
+        w.WriteHeader(status)
+        _ = json.NewEncoder(w).Encode(v)
+}</span>
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">package httpapi
+
+import (
+        "bytes"
+        "errors"
+        "io"
+        "log/slog"
+        "net/http"
+        "runtime/debug"
+        "time"
+
+        "github.com/Valentina17varela/sezzle-calculator/backend/internal/calc"
+)
+
+const maxBodyBytes = 1024
+
+// withMiddleware wraps next with request logging, panic recovery and the body
+// size limit. Logging is outermost so a recovered panic is logged as a 500.
+func withMiddleware(logger *slog.Logger, next http.Handler) http.Handler <span class="cov9" title="71">{
+        return logRequests(logger, recoverPanics(logger, limitBody(maxBodyBytes, next)))
+}</span>
+
+type statusRecorder struct {
+        http.ResponseWriter
+        status      int
+        wroteHeader bool
+}
+
+func (s *statusRecorder) WriteHeader(code int) <span class="cov9" title="74">{
+        if !s.wroteHeader </span><span class="cov9" title="73">{
+                s.status = code
+                s.wroteHeader = true
+        }</span>
+        <span class="cov9" title="74">s.ResponseWriter.WriteHeader(code)</span>
+}
+
+func (s *statusRecorder) Write(b []byte) (int, error) <span class="cov9" title="73">{
+        s.wroteHeader = true
+        return s.ResponseWriter.Write(b)
+}</span>
+
+func logRequests(logger *slog.Logger, next http.Handler) http.Handler <span class="cov9" title="75">{
+        return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) </span><span class="cov10" title="76">{
+                start := time.Now()
+                rec := &amp;statusRecorder{ResponseWriter: w, status: http.StatusOK}
+
+                next.ServeHTTP(rec, r)
+
+                logger.Info("request",
+                        "method", r.Method,
+                        "path", r.URL.Path,
+                        "status", rec.status,
+                        "duration", time.Since(start),
+                )
+        }</span>)
+}
+
+func recoverPanics(logger *slog.Logger, next http.Handler) http.Handler <span class="cov9" title="73">{
+        return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) </span><span class="cov9" title="74">{
+                defer func() </span><span class="cov9" title="74">{
+                        p := recover()
+                        if p == nil </span><span class="cov9" title="70">{
+                                return
+                        }</span>
+                        <span class="cov3" title="4">if p == http.ErrAbortHandler </span><span class="cov1" title="1">{
+                                panic(p)</span>
+                        }
+                        <span class="cov3" title="3">logger.Error("panic recovered", "panic", p, "stack", string(debug.Stack()))
+                        writeError(w, http.StatusInternalServerError, codeInternalError, internalErrorMessage)</span>
+                }()
+                <span class="cov9" title="74">next.ServeHTTP(w, r)</span>
+        })
+}
+
+// limitBody reads the whole body up front, so an oversized request is always
+// a 413 and never a parse error found earlier in the stream.
+func limitBody(limit int64, next http.Handler) http.Handler <span class="cov9" title="72">{
+        return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) </span><span class="cov9" title="73">{
+                body, err := io.ReadAll(http.MaxBytesReader(w, r.Body, limit))
+                if err != nil </span><span class="cov5" title="8">{
+                        var tooLarge *http.MaxBytesError
+                        if errors.As(err, &amp;tooLarge) </span><span class="cov5" title="7">{
+                                writeError(w, http.StatusRequestEntityTooLarge, calc.CodePayloadTooLarge, "request body is too large")
+                                return
+                        }</span>
+                        <span class="cov1" title="1">writeError(w, http.StatusBadRequest, calc.CodeInvalidJSON, "could not read request body")
+                        return</span>
+                }
+                <span class="cov9" title="65">r.Body = io.NopCloser(bytes.NewReader(body))
+                next.ServeHTTP(w, r)</span>
+        })
+}
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">package httpapi
+
+import (
+        "log/slog"
+        "net/http"
+
+        "github.com/Valentina17varela/sezzle-calculator/backend/internal/calc"
+)
+
+// NewRouter wires the API routes and middleware to the given calculation service.
+func NewRouter(svc *calc.Service) http.Handler <span class="cov9" title="61">{
+        return withMiddleware(slog.Default(), newMux(svc))
+}</span>
+
+func newMux(svc *calc.Service) *http.ServeMux <span class="cov10" title="69">{
+        h := &amp;handler{svc: svc}
+        mux := http.NewServeMux()
+        mux.HandleFunc("POST /api/v1/calculate", h.calculate)
+        mux.HandleFunc("GET /api/v1/operations", h.operations)
+        mux.HandleFunc("GET /health", h.health)
+
+        // Method-less patterns are less specific, so they only catch other methods.
+        mux.HandleFunc("/api/v1/calculate", methodNotAllowed("POST"))
+        mux.HandleFunc("/api/v1/operations", methodNotAllowed("GET, HEAD"))
+        mux.HandleFunc("/health", methodNotAllowed("GET, HEAD"))
+        return mux
+}</span>
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

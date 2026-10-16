@@ -61,3 +61,21 @@ make coverage
 - They live at fixed paths and are **overwritten on every `make coverage` run**, so the repo always holds the latest version (git history keeps the older ones).
 - `coverage.out` (the raw Go profile) is not versioned.
 - The README links to both reports next to the summary table.
+
+## 6. Acceptance run results
+
+Run in a real Chrome against the Docker stack (`web` and `api` containers, only the proxy port published).
+
+| # | Scenario | Result | Evidence |
+|---|---|---|---|
+| A1 | `0.1 + 0.2 =` | Pass | display `0.3` |
+| A2 | `1 / 0 =`, then `C` | Pass | alert "Cannot divide by zero"; after `C` the alert is gone and keys are enabled |
+| A3 | `16`, square root | Pass | display `4` |
+| A4 | `200 + 15 % =` | Pass | `15 %` of 200 shows `30`, then `=` shows `230` |
+| A5 | Backend stopped, `1 + 1 =` | Pass | alert "Cannot reach the calculator service. Try again"; `C` stays enabled |
+| A5b | Backend restarted, `2 + 3 =` | Pass | recovers without reloading the page, display `5` |
+| A6 | 360 px width | Pass | `scrollWidth` 360 of 360; no key under 44 px |
+| A7 | Keyboard only | Pass | `12.5 * 8 Enter` gives `100`, `9` then `r` gives `3`, first `Tab` shows a solid 3 px ring |
+| A8 | `docker compose up`, one port | Pass | UI served, `POST /api/v1/calculate` through the proxy returns `0.3` |
+
+Also verified in the same environment: the 26 API checks of `backend/scripts/smoke.sh` through the proxy, and the 64 digit history layout at 360, 768 and 1280 px.
