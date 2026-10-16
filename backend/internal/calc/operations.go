@@ -16,3 +16,11 @@ func Subtract(args []*big.Rat) (*big.Rat, error) {
 func Multiply(args []*big.Rat) (*big.Rat, error) {
 	return new(big.Rat).Mul(args[0], args[1]), nil
 }
+
+// Divide returns args[0] / args[1] exactly; rounding happens only on format.
+func Divide(args []*big.Rat) (*big.Rat, error) {
+	if args[1].Sign() == 0 {
+		return nil, newError(CodeDivisionByZero, "cannot divide by zero")
+	}
+	return new(big.Rat).Quo(args[0], args[1]), nil
+}
