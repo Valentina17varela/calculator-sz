@@ -97,7 +97,7 @@ Tick a box only after reviewing the task against its **Done when** list.
 | [ ] | B12 | B | Middleware: recovery, logging, body limit | B10, B11 | 15 min |
 | [ ] | B13 | B | `main.go`, config, graceful shutdown | B12 | 10 min |
 | [X] | F1 | F | Frontend scaffold and tooling | S1 | 15 min |
-| [ ] | F2 | F | Design read with taste skill (Step 1) | F1 | 10 min |
+| [X] | F2 | F | Design read with taste skill (Step 1) | F1 | 10 min |
 | [ ] | F3 | F | Theme tokens and base styles | F2 | 15 min |
 | [ ] | F4 | F | API client and types | F1 | 15 min |
 | [ ] | F5 | F | Calculator reducer (pure) | F1 | 25 min |
