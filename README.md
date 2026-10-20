@@ -71,10 +71,15 @@ flowchart LR
 
 Requirements: **Go 1.22+**, **Node 20.19+** (the Docker image uses 22), **Docker with Compose v2** and `make`.
 
+> **Before `make up`:** Docker must be running. Open Docker Desktop (or start the daemon on Linux) and wait until it reports it is running. Check with `docker info`. If you see `Cannot connect to the Docker daemon. Is the docker daemon running?`, Docker is not started. The first build downloads images and can take a few minutes.
+
 ```bash
 make up      # build and run both containers, then open http://localhost:8080
 make down    # stop them
 ```
+
+When the build finishes, open the app at **http://localhost:8080**.
+If it doesn't load, wait a few seconds for the containers to become *healthy* (`docker compose ps`).
 
 For development, run the backend and the Vite dev server together (open <http://localhost:5173>), or one at a time:
 
